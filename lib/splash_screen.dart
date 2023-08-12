@@ -48,7 +48,7 @@ class _SplashScreenState extends State<SplashScreen>
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SlideInDown(
-            duration: Duration(seconds: 1),
+            duration: Duration(seconds: 2),
             child: Image.asset(
               'assets/images/delivery-girl.png',
               height: 150,
@@ -62,8 +62,8 @@ class _SplashScreenState extends State<SplashScreen>
           //   'DeliveryX',
           //   style: TextStyle(fontSize: 35),
           // ),
-          SlideInUp(
-            duration: Duration(seconds: 1),
+          SlideInLeft(
+            duration: Duration(seconds: 2),
             child: Image.asset(
               'assets/images/DELIVERYX.png',
             ),

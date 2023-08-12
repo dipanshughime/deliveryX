@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "547006099680",
+    "project_id": "delapp-47503",
+    "storage_bucket": "delapp-47503.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:547006099680:android:12a036048a50bc61562085",
+        "android_client_info": {
+          "package_name": "com.example.deliveryx"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "547006099680-7e913bm6iutn4h2thqfu6l2j37i1a87n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCpg7PSaGchWWIDs0zwue_FclEAK3yQsmA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "547006099680-7e913bm6iutn4h2thqfu6l2j37i1a87n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
