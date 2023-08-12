@@ -3,6 +3,7 @@ import 'package:deliveryx/pallete.dart';
 import 'package:flutter/material.dart';
 import 'package:deliveryx/main.dart';
 import 'package:flutter/services.dart';
+import 'package:animate_do/animate_do.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -46,10 +47,12 @@ class _SplashScreenState extends State<SplashScreen>
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(
-            'assets/images/delivery-girl.png',
-            height: 150,
-            width: 160,
+          SlideInDown(
+            child: Image.asset(
+              'assets/images/delivery-girl.png',
+              height: 150,
+              width: 160,
+            ),
           ),
           SizedBox(
             height: 50,
@@ -58,8 +61,10 @@ class _SplashScreenState extends State<SplashScreen>
           //   'DeliveryX',
           //   style: TextStyle(fontSize: 35),
           // ),
-          Image.asset(
-            'assets/images/DELIVERYX.png',
+          SlideInUp(
+            child: Image.asset(
+              'assets/images/DELIVERYX.png',
+            ),
           ),
         ],
       ),
