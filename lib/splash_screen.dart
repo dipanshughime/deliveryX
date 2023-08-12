@@ -1,3 +1,4 @@
+import 'package:deliveryx/Auth/registration.dart';
 import 'package:deliveryx/homescreen.dart';
 import 'package:deliveryx/pallete.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,7 @@ class _SplashScreenState extends State<SplashScreen>
 
     Future.delayed(Duration(seconds: 4), () {
       Navigator.of(context)
-          .pushReplacement(MaterialPageRoute(builder: (_) => HomeScreen()));
+          .pushReplacement(MaterialPageRoute(builder: (_) => RegisterApp()));
     });
   }
 
