@@ -20,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen>
     super.initState();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
 
-    Future.delayed(Duration(seconds: 3), () {
+    Future.delayed(Duration(seconds: 4), () {
       Navigator.of(context)
           .pushReplacement(MaterialPageRoute(builder: (_) => HomeScreen()));
     });
@@ -48,6 +48,7 @@ class _SplashScreenState extends State<SplashScreen>
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SlideInDown(
+            duration: Duration(seconds: 1),
             child: Image.asset(
               'assets/images/delivery-girl.png',
               height: 150,
@@ -62,6 +63,7 @@ class _SplashScreenState extends State<SplashScreen>
           //   style: TextStyle(fontSize: 35),
           // ),
           SlideInUp(
+            duration: Duration(seconds: 1),
             child: Image.asset(
               'assets/images/DELIVERYX.png',
             ),
