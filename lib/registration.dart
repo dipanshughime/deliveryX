@@ -13,11 +13,20 @@ class _RegistrationPageState extends State<RegistrationPage> {
       TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  bool _showPassword = false;
+
   Future<void> _register() async {
     try {
+      if (_passwordController.text != _confirmPasswordController.text) {
+        // Passwords don't match, show an error message or alert
+        return;
+      }
+
       final UserCredential userCredential =
           await _auth.createUserWithEmailAndPassword(
         email: _emailController.text,
@@ -40,36 +49,109 @@ class _RegistrationPageState extends State<RegistrationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Register')),
-      body: Padding(
-        padding: const EdgeInsets.all(30.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextField(
+      appBar: AppBar(
+        title: Text('Register'),
+        backgroundColor: const Color.fromARGB(255, 5, 13, 60),
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+          color: Colors.lightBlue[50], // Light blue background color
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(30.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextField(
                 controller: _nameController,
-                decoration: const InputDecoration(
-                    labelText: 'Name', hintText: 'Enter your name')),
-            SizedBox(height: 10),
-            TextField(
+                decoration: InputDecoration(
+                  labelText: 'Name',
+                  hintText: 'Enter your name',
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+              ),
+              SizedBox(height: 10),
+              TextField(
                 controller: _contactNumberController,
-                decoration: const InputDecoration(
-                    labelText: 'Contact Number',
-                    hintText: 'Enter your number')),
-            SizedBox(height: 10),
-            TextField(
+                decoration: InputDecoration(
+                  labelText: 'Contact Number',
+                  hintText: 'Enter your number',
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+              ),
+              SizedBox(height: 10),
+              TextField(
                 controller: _emailController,
-                decoration: const InputDecoration(
-                    labelText: 'Email', hintText: 'Enter your email')),
-            SizedBox(height: 10),
-            TextField(
+                decoration: InputDecoration(
+                  labelText: 'Email',
+                  hintText: 'Enter your email',
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+              ),
+              SizedBox(height: 10),
+              TextField(
                 controller: _passwordController,
-                obscureText: true,
-                decoration: const InputDecoration(
-                    labelText: 'Password', hintText: 'Password')),
-            SizedBox(height: 20),
-            ElevatedButton(onPressed: _register, child: Text('Register')),
-          ],
+                obscureText: !_showPassword,
+                decoration: InputDecoration(
+                  labelText: 'Password',
+                  hintText: 'Password',
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        _showPassword = !_showPassword;
+                      });
+                    },
+                    icon: Icon(
+                      _showPassword ? Icons.visibility : Icons.visibility_off,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 10),
+              TextField(
+                controller: _confirmPasswordController,
+                obscureText: !_showPassword,
+                decoration: InputDecoration(
+                  labelText: 'Confirm Password',
+                  hintText: 'Confirm Password',
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _register,
+                child: Text('Register'),
+                style: ElevatedButton.styleFrom(
+                  primary: Color.fromARGB(255, 252, 252, 252),
+                  padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
