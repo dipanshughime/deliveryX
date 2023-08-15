@@ -1,14 +1,14 @@
-import 'package:deliveryx/splash_screen.dart';
+import 'package:deliveryx/Users/Splash_screen/splash_screen.dart';
+import 'package:deliveryx/Users/Users_screen/login_screen.dart';
+import 'package:deliveryx/themeProvider/theme_Provider.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
-void main() async {
+Future<void> main() async {
   runApp(const MyApp());
-
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
 }
 
 class MyApp extends StatelessWidget {
@@ -19,11 +19,14 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'DeliveryX',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        useMaterial3: true,
-      ),
-      home: SplashScreen(),
+      themeMode: ThemeMode.system,
+      theme: MyThemes.lightTheme,
+      darkTheme: MyThemes.darkTheme,
+      // theme: ThemeData(
+      //   colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+      //   useMaterial3: true,
+      // ),
+      home: LoginScreen(),
     );
   }
 }
