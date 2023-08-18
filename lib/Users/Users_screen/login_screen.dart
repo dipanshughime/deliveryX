@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:deliveryx/Users/Users_screen/registration.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+import 'home_screens.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -9,9 +12,48 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final phoneTextEditingController = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final emailTextEditingController = TextEditingController();
   final passwordTextEditingController = TextEditingController();
   bool passwordVisible = false;
+
+  void _login() async {
+    try {
+      final authResult = await _auth.signInWithEmailAndPassword(
+        email: emailTextEditingController.text.trim(),
+        password: passwordTextEditingController.text.trim(),
+      );
+
+      if (authResult.user != null) {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (c) => HomeScreen()));
+      } else {
+        // Handle login failure
+        _showDialog("Login Failed", "Invalid credentials. Please try again.");
+      }
+    } catch (error) {
+      // Handle login error
+      _showDialog("Login Error", "An error occurred while logging in.");
+    }
+  }
+
+  void _showDialog(String title, String content) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: Text(content),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text("OK"),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,10 +61,8 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Padding(
         padding: const EdgeInsets.all(50),
         child: Column(
-          mainAxisAlignment:
-              MainAxisAlignment.center, // Center all elements vertically
-          crossAxisAlignment:
-              CrossAxisAlignment.center, // Center all elements horizontally
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
               'Cheaper and faster delivery ',
@@ -44,11 +84,11 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             SizedBox(height: 20),
             TextField(
-              controller: phoneTextEditingController,
-              keyboardType: TextInputType.phone,
+              controller: emailTextEditingController,
+              keyboardType: TextInputType.emailAddress, // Corrected input type
               decoration: InputDecoration(
-                hintText: "Phone Number",
-                prefixIcon: Icon(Icons.phone),
+                hintText: "Email", // Changed hint text
+                prefixIcon: Icon(Icons.email),
                 contentPadding: EdgeInsets.symmetric(horizontal: 20),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30),
@@ -81,14 +121,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 if (value!.isEmpty) {
                   return 'Please enter a password';
                 }
-                // You can add more password validation logic here
                 return null;
               },
             ),
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                // Perform login logic here
+                _login();
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
@@ -112,7 +151,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 Text("New user? "),
                 TextButton(
                   onPressed: () {
-                    // Navigate to the sign-up page
                     Navigator.push(context,
                         MaterialPageRoute(builder: (c) => RegisterScreen()));
                   },

@@ -5,9 +5,11 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  RegisterScreen({super.key});
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
@@ -24,19 +26,54 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool passwordVisible = false;
 
   final _formKey = GlobalKey<FormState>();
-  void _submit() async {
-    // validate the form fields
+  // void _submit() async {
+  //   // validate the form fields
 
+  //   if (_formKey.currentState!.validate()) {
+  //     await _auth
+  //         .createUserWithEmailAndPassword(
+  //             email: emailTextEditingController.text.trim(),
+  //             password: passwordTextEditingController.text.trim())
+  //         .then((auth) async {
+  //       currentUser = auth.user;
+
+  //       if (currentUser != null) {
+  //         Map userMap = {
+  //           "id": currentUser!.uid,
+  //           "name": nameTextEditingController.text.trim(),
+  //           "email": emailTextEditingController.text.trim(),
+  //           "address": addressTextEditingController.text.trim(),
+  //           "phone": phoneTextEditingController.text.trim(),
+  //         };
+
+  //         DatabaseReference userRef =
+  //             FirebaseDatabase.instance.ref().child("senders");
+
+  //         userRef.child(currentUser!.uid).set(userMap);
+  //       }
+
+  //       await Fluttertoast.showToast(msg: "Successfully Registered");
+  //       Navigator.push(
+  //           context, MaterialPageRoute(builder: (c) => HomeScreen()));
+  //     }).catchError((errorMessage) {
+  //       Fluttertoast.showToast(msg: "Error occurred :\n $errorMessage");
+  //     });
+  //   } else {
+  //     Fluttertoast.showToast(msg: "Not all fields are valid");
+  //   }
+  // }
+
+  void _submit() async {
     if (_formKey.currentState!.validate()) {
-      await firebaseAuth
-          .createUserWithEmailAndPassword(
-              email: emailTextEditingController.text.trim(),
-              password: passwordTextEditingController.text.trim())
-          .then((auth) async {
-        currentUser = auth.user;
+      try {
+        final authResult = await widget._auth.createUserWithEmailAndPassword(
+          email: emailTextEditingController.text.trim(),
+          password: passwordTextEditingController.text.trim(),
+        );
+        currentUser = authResult.user;
 
         if (currentUser != null) {
-          Map userMap = {
+          Map<String, dynamic> userMap = {
             "id": currentUser!.uid,
             "name": nameTextEditingController.text.trim(),
             "email": emailTextEditingController.text.trim(),
@@ -45,7 +82,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           };
 
           DatabaseReference userRef =
-              FirebaseDatabase.instance.ref().child("senders");
+              FirebaseDatabase.instance.reference().child("senders");
 
           userRef.child(currentUser!.uid).set(userMap);
         }
@@ -53,9 +90,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
         await Fluttertoast.showToast(msg: "Successfully Registered");
         Navigator.push(
             context, MaterialPageRoute(builder: (c) => HomeScreen()));
-      }).catchError((errorMessage) {
-        Fluttertoast.showToast(msg: "Error occurred :\n $errorMessage");
-      });
+      } catch (error) {
+        Fluttertoast.showToast(msg: "Error occurred:\n$error");
+      }
     } else {
       Fluttertoast.showToast(msg: "Not all fields are valid");
     }
