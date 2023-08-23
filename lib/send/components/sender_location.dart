@@ -17,7 +17,7 @@ class SenderLocationInfo extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Your Location',
+                'Your Location : ',
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   fontSize: 12,
