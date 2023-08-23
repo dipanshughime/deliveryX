@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RegisterScreen extends StatefulWidget {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -26,42 +27,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool passwordVisible = false;
 
   final _formKey = GlobalKey<FormState>();
-  // void _submit() async {
-  //   // validate the form fields
-
-  //   if (_formKey.currentState!.validate()) {
-  //     await _auth
-  //         .createUserWithEmailAndPassword(
-  //             email: emailTextEditingController.text.trim(),
-  //             password: passwordTextEditingController.text.trim())
-  //         .then((auth) async {
-  //       currentUser = auth.user;
-
-  //       if (currentUser != null) {
-  //         Map userMap = {
-  //           "id": currentUser!.uid,
-  //           "name": nameTextEditingController.text.trim(),
-  //           "email": emailTextEditingController.text.trim(),
-  //           "address": addressTextEditingController.text.trim(),
-  //           "phone": phoneTextEditingController.text.trim(),
-  //         };
-
-  //         DatabaseReference userRef =
-  //             FirebaseDatabase.instance.ref().child("senders");
-
-  //         userRef.child(currentUser!.uid).set(userMap);
-  //       }
-
-  //       await Fluttertoast.showToast(msg: "Successfully Registered");
-  //       Navigator.push(
-  //           context, MaterialPageRoute(builder: (c) => HomeScreen()));
-  //     }).catchError((errorMessage) {
-  //       Fluttertoast.showToast(msg: "Error occurred :\n $errorMessage");
-  //     });
-  //   } else {
-  //     Fluttertoast.showToast(msg: "Not all fields are valid");
-  //   }
-  // }
 
   void _submit() async {
     if (_formKey.currentState!.validate()) {
@@ -81,10 +46,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
             "phone": phoneTextEditingController.text.trim(),
           };
 
-          DatabaseReference userRef =
-              FirebaseDatabase.instance.reference().child("senders");
-
-          userRef.child(currentUser!.uid).set(userMap);
+          // Store user data in Firestore
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(currentUser!.uid)
+              .set(userMap);
         }
 
         await Fluttertoast.showToast(msg: "Successfully Registered");

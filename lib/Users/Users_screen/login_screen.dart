@@ -1,3 +1,4 @@
+import 'package:deliveryx/Users/Users_screen/phone_otp_login.dart';
 import 'package:flutter/material.dart';
 import 'package:deliveryx/Users/Users_screen/registration.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -144,6 +145,28 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Text('Login'),
               ),
             ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (c) => PhoneOTPLoginScreen()));
+              },
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                primary: Colors
+                    .purple[300], // Change the color according to your design
+                onPrimary: Colors.white,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 12,
+                  horizontal: 24,
+                ),
+                child: Text('Login with Phone Number'),
+              ),
+            ),
+            // ..
             SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
