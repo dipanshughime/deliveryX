@@ -46,6 +46,7 @@ dependencies:
   cloud_firestore: ^4.8.5
   # cloud_firestore: ^4.8.4
   firebase_phone_auth_handler: ^1.0.8
+  font_awesome_flutter: ^10.5.0
   
 dev_dependencies:
   flutter_test:
