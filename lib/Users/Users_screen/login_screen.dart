@@ -1,3 +1,4 @@
+import 'package:deliveryx/Users/Users_screen/login_with_otp.dart';
 import 'package:flutter/material.dart';
 import 'package:deliveryx/Users/Users_screen/registration.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -145,7 +146,10 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                 Navigator.push(context,
+                        MaterialPageRoute(builder: (c) => LoginScreenOTP()));
+              },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
