@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "547006099680",
+    "firebase_url": "https://delapp-47503-default-rtdb.asia-southeast1.firebasedatabase.app",
     "project_id": "delapp-47503",
     "storage_bucket": "delapp-47503.appspot.com"
   },
@@ -29,6 +30,13 @@
             {
               "client_id": "547006099680-7e913bm6iutn4h2thqfu6l2j37i1a87n.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "547006099680-ebvev3orvqucsm4e5eue828co9fg56ft.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.deliveryx"
+              }
             }
           ]
         }
