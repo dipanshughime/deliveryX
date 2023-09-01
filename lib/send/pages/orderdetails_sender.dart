@@ -2,8 +2,6 @@ import 'dart:html';
 import 'dart:js_interop';
 import 'package:flutter/material.dart';
 
-import '../components/sender_location.dart';
-
 class DetailsLabel extends StatelessWidget {
   final String label;
   const DetailsLabel({
@@ -317,37 +315,86 @@ class _OrderDetailsState extends State<OrderDetails> {
                         return null;
                       },
                     ),
+                    SizedBox(height: 16),
+                    Text(
+                      'Enter the Recievers Available Time',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Row(children: [
+                      Container(
+                        width: 100,
+                        child: buildTextField(
+                          'From',
+                          Icons.location_on,
+                          '08:00',
+                          validator: (value) {
+                            if (int.parse(value!) > 24 ||
+                                int.parse(value!) < 0) {
+                              return 'Enter Correct Time';
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      Text(':'),
+                      SizedBox(width: 10),
+                      Container(
+                        width: 100,
+                        child: buildTextField(
+                          'To',
+                          Icons.location_on,
+                          '13:00',
+                          validator: (value) {
+                            if (int.parse(value!) > 24 ||
+                                int.parse(value) < 0) {
+                              return 'Enter correct time';
+                            }
+                            return null;
+                          },
+                        ),
+                      )
+                    ])
                   ]),
                 ]),
               ),
 
+              SizedBox(height: 16),
               Center(
-                child: SizedBox(
-                  height: 50,
-                  child: TextButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        // Form is valid, process the data
-                        // For demonstration, print a message
-                        print('Package details submitted');
-                      }
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                      child: Text('Enter Package Details'),
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      // Perform registration logic
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //       builder: (context) => LoginScreen()),
+                      // );
+                    }
+                  },
+                  child: Text(
+                    'Enter Package Details',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
                     ),
-                    style: ButtonStyle(
-                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25))),
-                        backgroundColor:
-                            MaterialStateProperty.all(Colors.purple),
-                        foregroundColor:
-                            MaterialStateProperty.all(Colors.white),
-                        fixedSize:
-                            MaterialStateProperty.all(Size.fromHeight(30))),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    primary: Color(0xFFA084E8), // Button color
+                    onPrimary: Colors.black, // Text color
+                    padding: EdgeInsets.all(20),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
+                    elevation: 5,
+                    minimumSize: Size(double.infinity, 0), // Full width
                   ),
                 ),
-              )
+              ),
+              SizedBox(height: 16),
             ]),
           ),
         ),
