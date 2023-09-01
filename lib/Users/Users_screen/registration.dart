@@ -1,3 +1,4 @@
+import 'package:deliveryx/Users/Users_screen/Onboarding.dart';
 import 'package:deliveryx/Users/Users_screen/home_screens.dart';
 import 'package:deliveryx/Users/Users_screen/login_screen.dart';
 import 'package:deliveryx/Users/global_user/global_user.dart';
@@ -8,6 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -67,7 +69,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
         await Fluttertoast.showToast(msg: "Successfully Registered");
         Navigator.push(
-            context, MaterialPageRoute(builder: (c) => HomeScreen()));
+            context, MaterialPageRoute(builder: (c) => Onboarding()));
       } catch (error) {
         Fluttertoast.showToast(msg: "Error occurred:\n$error");
       }

@@ -217,34 +217,6 @@ class _LoginScreenState extends State<LoginScreenOTP> {
   }
 }
 
-class DialogExample extends StatelessWidget {
-  const DialogExample({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: () => showDialog<String>(
-        context: context,
-        builder: (BuildContext context) => AlertDialog(
-          title: const Text('AlertDialog Title'),
-          content: const Text('AlertDialog description'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () => Navigator.pop(context, 'Cancel'),
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(context, 'OK'),
-              child: const Text('OK'),
-            ),
-          ],
-        ),
-      ),
-      child: const Text('Show Dialog'),
-    );
-  }
-}
-
 class PhoneNumberInputSection extends StatefulWidget {
   final void Function() toggleView;
 
@@ -259,13 +231,13 @@ class _PhoneNumberInputSectionState extends State<PhoneNumberInputSection> {
   TextEditingController _phoneNumberController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   String selectedCountryCode = '+91';
-  TextEditingController _otpController = TextEditingController();
+  // TextEditingController _otpController = TextEditingController();
 
   // late String _verificationId = "";
   // FirebaseAuth _auth = FirebaseAuth.instance;
   final _db = FirebaseFirestore.instance;
-  late String verificationId;
-  late PhoneAuthCredential credential;
+  static late String verificationId;
+  static late PhoneAuthCredential credential;
   Future<void> dataindb(String phone) async {
     final snapshot =
         await _db.collection("users").where("phone", isEqualTo: phone).get();
@@ -282,7 +254,7 @@ class _PhoneNumberInputSectionState extends State<PhoneNumberInputSection> {
       //       context, MaterialPageRoute(builder: (c) => RegisterScreen()));
     } else {
       sendOTP();
-      // widget.toggleView();
+      widget.toggleView();
     }
   }
 
@@ -345,18 +317,18 @@ class _PhoneNumberInputSectionState extends State<PhoneNumberInputSection> {
       await FirebaseAuth.instance.verifyPhoneNumber(
         phoneNumber: "$selectedCountryCode $first $second $third",
         verificationCompleted: (credential) {
-          this.credential = credential;
+          _PhoneNumberInputSectionState.credential = credential;
           setState(() {});
         },
         verificationFailed: (error) {
           print(error);
         },
         codeSent: (verificationId, forceResendingToken) {
-          this.verificationId = verificationId;
+          _PhoneNumberInputSectionState.verificationId = verificationId;
           setState(() {});
         },
         codeAutoRetrievalTimeout: (verificationId) {
-          this.verificationId = verificationId;
+          _PhoneNumberInputSectionState.verificationId = verificationId;
           setState(() {});
           // print('Auto retrieval timeout');
         },
@@ -367,15 +339,23 @@ class _PhoneNumberInputSectionState extends State<PhoneNumberInputSection> {
     }
   }
 
-  Future<void> verifyOTP() async {
-    try {
-      await FirebaseAuth.instance.signInWithCredential(credential);
-       Navigator.push(
-            context, MaterialPageRoute(builder: (c) => HomeScreen()));
-    } catch (e) {
-      print(e);
-    }
-  }
+  // Future<void> verifyOTP() async {
+  //   try {
+  //     await FirebaseAuth.instance.signInWithCredential(credential);
+  //       Fluttertoast.showToast(
+  //         msg: "Logged In Successfully",
+  //         toastLength: Toast.LENGTH_SHORT,
+  //         gravity: ToastGravity.CENTER,
+  //         timeInSecForIosWeb: 1,
+  //         backgroundColor: Color.fromARGB(255, 125, 113, 241),
+  //         textColor: Colors.white,
+  //         fontSize: 16.0);
+  //      Navigator.push(
+  //           context, MaterialPageRoute(builder: (c) => HomeScreen()));
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -456,25 +436,25 @@ class _PhoneNumberInputSectionState extends State<PhoneNumberInputSection> {
         ),
         // SizedBox(height: 32),
         // buildTextField('OTP', Icons.lock, 'Enter the OTP received'),
-        SizedBox(height: 20),
-            TextField(
-              controller: _otpController,
-              keyboardType: TextInputType.number, // Corrected input type
-              decoration: InputDecoration(
-                hintText: "Enter Otp", // Changed hint text
-                prefixIcon: Icon(Icons.lock),
-                contentPadding: EdgeInsets.symmetric(horizontal: 20),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-              ),
-              onChanged: (value) {
-                  credential = PhoneAuthProvider.credential(
-                    verificationId: verificationId,
-                    smsCode: value,
-                  );
-                },
-            ),
+        // SizedBox(height: 20),
+        // TextField(
+        //   controller: _otpController,
+        //   keyboardType: TextInputType.number, // Corrected input type
+        //   decoration: InputDecoration(
+        //     hintText: "Enter Otp", // Changed hint text
+        //     prefixIcon: Icon(Icons.lock),
+        //     contentPadding: EdgeInsets.symmetric(horizontal: 20),
+        //     border: OutlineInputBorder(
+        //       borderRadius: BorderRadius.circular(30),
+        //     ),
+        //   ),
+        //   onChanged: (value) {
+        //     credential = PhoneAuthProvider.credential(
+        //       verificationId: verificationId,
+        //       smsCode: value,
+        //     );
+        //   },
+        // ),
         SizedBox(height: 32),
         ElevatedButton(
           onPressed: () {
@@ -498,30 +478,30 @@ class _PhoneNumberInputSectionState extends State<PhoneNumberInputSection> {
             minimumSize: Size(double.infinity, 0), // Full width
           ),
         ),
-        SizedBox(height: 32),
-        ElevatedButton(
-          onPressed: () {
-            // dataindb(_phoneNumberController.text.trim());
-            verifyOTP();
-            //   widget.toggleView();
-          },
-          child: Text(
-            'Sign In',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 18,
-            ),
-          ),
-          style: ElevatedButton.styleFrom(
-            primary: Color(0xFFA084E8), // Button color
-            onPrimary: Colors.black, // Text color
-            padding: EdgeInsets.all(20),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30.0),
-            ),
-            minimumSize: Size(double.infinity, 0), // Full width
-          ),
-        ),
+        // SizedBox(height: 32),
+        // ElevatedButton(
+        //   onPressed: () {
+        //     // dataindb(_phoneNumberController.text.trim());
+        //     // verifyOTP();
+        //     //   widget.toggleView();
+        //   },
+        //   child: Text(
+        //     'Sign In',
+        //     style: TextStyle(
+        //       color: Colors.white,
+        //       fontSize: 18,
+        //     ),
+        //   ),
+          // style: ElevatedButton.styleFrom(
+          //   primary: Color(0xFFA084E8), // Button color
+          //   onPrimary: Colors.black, // Text color
+          //   padding: EdgeInsets.all(20),
+          //   shape: RoundedRectangleBorder(
+          //     borderRadius: BorderRadius.circular(30.0),
+          //   ),
+          //   minimumSize: Size(double.infinity, 0), // Full width
+          // ),
+        
       ],
     );
   }
@@ -530,7 +510,7 @@ class _PhoneNumberInputSectionState extends State<PhoneNumberInputSection> {
 //       {bool isPassword = false,
 //       TextInputType? keyboardType,
 //       FormFieldValidator<String>? validator}) {
-    
+
 //     return Column(
 //       crossAxisAlignment: CrossAxisAlignment.start,
 //       children: [
@@ -568,7 +548,7 @@ class _PhoneNumberInputSectionState extends State<PhoneNumberInputSection> {
 //       ],
 //     );
 //   }
- }
+}
 
 class OTPInputSection extends StatefulWidget {
   final void Function() toggleView;
@@ -594,17 +574,52 @@ class _OTPInputSectionState extends State<OTPInputSection> {
   //   }
   // }
 
+  Future<void> verifyOTP() async {
+    try {
+      await FirebaseAuth.instance.signInWithCredential(_PhoneNumberInputSectionState.credential);
+      Fluttertoast.showToast(
+          msg: "Logged In Successfully",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Color.fromARGB(255, 125, 113, 241),
+          textColor: Colors.white,
+          fontSize: 16.0);
+      Navigator.push(context, MaterialPageRoute(builder: (c) => HomeScreen()));
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        buildTextField('OTP', Icons.lock, 'Enter the OTP received'),
+        // buildTextField('OTP', Icons.lock, 'Enter the OTP received'),
+          SizedBox(height: 20),
+        TextField(
+          controller: _otpController,
+          keyboardType: TextInputType.number, // Corrected input type
+          decoration: InputDecoration(
+            hintText: "Enter Otp", // Changed hint text
+            prefixIcon: Icon(Icons.lock),
+            contentPadding: EdgeInsets.symmetric(horizontal: 20),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
+          ),
+          onChanged: (value) {
+            _PhoneNumberInputSectionState.credential = PhoneAuthProvider.credential(
+              verificationId: _PhoneNumberInputSectionState.verificationId,
+              smsCode: value,
+            );
+          },
+        ),
         SizedBox(height: 32),
         ElevatedButton(
           onPressed: () {
-            // var a = new _PhoneNumberInputSectionState();
-            // a.callotp(_otpController.text.trim());
+            verifyOTP();
           },
           child: Text(
             'Sign In',
@@ -651,39 +666,40 @@ class _OTPInputSectionState extends State<OTPInputSection> {
     );
   }
 
-  Widget buildTextField(String label, IconData icon, String hint,
-      {bool isPassword = false,
-      TextInputType? keyboardType,
-      FormFieldValidator<String>? validator}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        SizedBox(height: 8),
-        TextFormField(
-          obscureText: isPassword,
-          keyboardType: keyboardType,
-          validator: validator, // Validator function
-          decoration: InputDecoration(
-            prefixIcon: Icon(icon, color: Color(0xFFA084E8)),
-            hintText: hint,
-            border: OutlineInputBorder(),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Color.fromARGB(255, 203, 195, 195)),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Color(0xFFA084E8)),
-              borderRadius: BorderRadius.circular(15),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
+  // Widget buildTextField(String label, IconData icon, String hint,
+  //     {bool isPassword = false,
+  //     TextInputType? keyboardType,
+  //     FormFieldValidator<String>? validator}) {
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       Text(
+  //         label,
+  //         style: TextStyle(
+  //           fontWeight: FontWeight.bold,
+  //         ),
+  //       ),
+  //       SizedBox(height: 8),
+  //       TextFormField(
+  //         obscureText: isPassword,
+  //         keyboardType: keyboardType,
+  //         validator: validator, // Validator function
+  //         decoration: InputDecoration(
+  //           prefixIcon: Icon(icon, color: Color(0xFFA084E8)),
+  //           hintText: hint,
+  //           border: OutlineInputBorder(),
+  //           enabledBorder: OutlineInputBorder(
+  //             borderSide: BorderSide(color: Color.fromARGB(255, 203, 195, 195)),
+  //             borderRadius: BorderRadius.circular(8),
+  //           ),
+         
+  //           focusedBorder: OutlineInputBorder(
+  //             borderSide: BorderSide(color: Color(0xFFA084E8)),
+  //             borderRadius: BorderRadius.circular(15),
+  //           ),
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
 }
