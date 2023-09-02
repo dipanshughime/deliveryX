@@ -40,7 +40,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                         padding: const EdgeInsets.all(3.0),
                         child: TabBar(
                             unselectedLabelColor: Colors.black,
-                            labelColor: Colors.purple,
+                            labelColor: Colors.purple[200],
                             indicatorColor: Colors.white,
                             indicatorWeight: 2,
                             indicator: BoxDecoration(

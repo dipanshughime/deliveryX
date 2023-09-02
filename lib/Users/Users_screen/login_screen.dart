@@ -1,10 +1,8 @@
-import 'package:deliveryx/Users/Users_screen/Onboarding.dart';
-import 'package:deliveryx/Users/Users_screen/login_with_otp.dart';
 import 'package:flutter/material.dart';
-import 'package:deliveryx/Users/Users_screen/registration.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-
-import 'home_screens.dart';
+import '../../services/auth.dart';
+import 'registration.dart';
+import 'login_with_otp.dart';
+import 'onboarding.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -14,21 +12,22 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final emailTextEditingController = TextEditingController();
-  final passwordTextEditingController = TextEditingController();
+  final AuthService _authService = AuthService();
+  final TextEditingController emailTextEditingController =
+      TextEditingController();
+  final TextEditingController passwordTextEditingController =
+      TextEditingController();
   bool passwordVisible = false;
 
   void _login() async {
     try {
-      final authResult = await _auth.signInWithEmailAndPassword(
-        email: emailTextEditingController.text.trim(),
-        password: passwordTextEditingController.text.trim(),
+      final user = await _authService.signInWithEmailAndPassword(
+        emailTextEditingController.text.trim(),
+        passwordTextEditingController.text.trim(),
       );
 
-      if (authResult.user != null) {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (c) => HomeScreen()));
+      if (user != null) {
+        Navigator.push(context, MaterialPageRoute(builder: (c) => Onboarding()));
       } else {
         // Handle login failure
         _showDialog("Login Failed", "Invalid credentials. Please try again.");
@@ -87,9 +86,9 @@ class _LoginScreenState extends State<LoginScreen> {
             SizedBox(height: 20),
             TextField(
               controller: emailTextEditingController,
-              keyboardType: TextInputType.emailAddress, // Corrected input type
+              keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
-                hintText: "Email", // Changed hint text
+                hintText: "Email",
                 prefixIcon: Icon(Icons.email),
                 contentPadding: EdgeInsets.symmetric(horizontal: 20),
                 border: OutlineInputBorder(
@@ -129,9 +128,7 @@ class _LoginScreenState extends State<LoginScreen> {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                 Navigator.push(context,
-                        MaterialPageRoute(builder: (c) => Onboarding()));
-                
+                _login();
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
@@ -150,15 +147,13 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             ElevatedButton(
               onPressed: () {
-                 Navigator.push(context,
-                        MaterialPageRoute(builder: (c) => LoginScreenOTP()));
+                Navigator.push(context, MaterialPageRoute(builder: (c) => LoginScreenOTP()));
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
                 ),
-                primary: Colors
-                    .purple[300], // Change the color according to your design
+                primary: Colors.purple[300],
                 onPrimary: Colors.white,
               ),
               child: Padding(
@@ -169,7 +164,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Text('Login with Phone Number'),
               ),
             ),
-            // ..
             SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -177,8 +171,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Text("New user? "),
                 TextButton(
                   onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (c) => RegisterScreen()));
+                    Navigator.push(context, MaterialPageRoute(builder: (c) => RegisterScreen()));
                   },
                   child: Text(
                     'Sign up',
@@ -188,22 +181,6 @@ class _LoginScreenState extends State<LoginScreen> {
               ],
             ),
             SizedBox(height: 20),
-            // ElevatedButton(
-            //   onPressed: () {
-            //     // Perform Google sign-up logic here
-            //   },
-            //   style: ElevatedButton.styleFrom(
-            //     shape: RoundedRectangleBorder(
-            //       borderRadius: BorderRadius.circular(30),
-            //     ),
-            //     primary: Color.fromARGB(255, 241, 240, 240),
-            //     onPrimary: Color.fromARGB(255, 0, 0, 0),
-            //   ),
-            //   // icon: Image.asset(
-            //   // 'path_to_google_icon.png'), // Replace with the actual path
-
-            //   child: Text('Sign up with Google'),
-            // ),
           ],
         ),
       ),

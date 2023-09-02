@@ -1,22 +1,17 @@
-import 'package:deliveryx/Users/Users_screen/Onboarding.dart';
-import 'package:deliveryx/Users/Users_screen/home_screens.dart';
-import 'package:deliveryx/Users/Users_screen/login_screen.dart';
-import 'package:deliveryx/Users/Users_screen/login_with_otp.dart';
-import 'package:deliveryx/Users/global_user/global_user.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 
+import '../../services/auth.dart';
+import '../../services/firestore.dart';
+import 'login_screen.dart';
+import 'login_with_otp.dart';
+ // Import the auth.dart file with Firebase-related functions
+
 class RegisterScreen extends StatefulWidget {
   @override
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  RegisterScreen({super.key});
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  _RegisterScreenState createState() => _RegisterScreenState();
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
@@ -34,11 +29,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
     'Pune'
   ];
   String? selectedCity;
-
+  final AuthService _authService = AuthService();
+  final FirestoreService _firestoreService = FirestoreService();
   final nameTextEditingController = TextEditingController();
   final emailTextEditingController = TextEditingController();
   final phoneTextEditingController = TextEditingController();
-  final addressTextEditingController = TextEditingController();
   final passwordTextEditingController = TextEditingController();
 
   bool passwordVisible = false;
@@ -46,31 +41,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void _submit() async {
     if (_formKey.currentState!.validate()) {
       try {
-        final authResult = await widget._auth.createUserWithEmailAndPassword(
-          email: emailTextEditingController.text.trim(),
-          password: passwordTextEditingController.text.trim(),
+        final user = await _authService.signUpWithEmailAndPassword(
+          emailTextEditingController.text.trim(),
+          passwordTextEditingController.text.trim(),
         );
-        currentUser = authResult.user;
 
-        if (currentUser != null) {
-          Map<String, dynamic> userMap = {
-            "id": currentUser!.uid,
-            "name": nameTextEditingController.text.trim(),
-            "email": emailTextEditingController.text.trim(),
-            // "address": addressTextEditingController.text.trim(),
-            "phone": phoneTextEditingController.text.trim(),
-          };
-
-          // Store user data in Firestore
-          await FirebaseFirestore.instance
-              .collection('users')
-              .doc(currentUser!.uid)
-              .set(userMap);
-        }
+        if (user != null) {
+          await _firestoreService.addUserToFirestore(
+            userId: user.uid,
+            name: nameTextEditingController.text.trim(),
+            email: emailTextEditingController.text.trim(),
+            phone: phoneTextEditingController.text.trim(),
+            location: selectedCity!,
+          );
 
         await Fluttertoast.showToast(msg: "Successfully Registered");
         Navigator.push(
-            context, MaterialPageRoute(builder: (c) => Onboarding()));
+          context,
+          MaterialPageRoute(builder: (c) => LoginScreen()),
+        );
+        }
       } catch (error) {
         Fluttertoast.showToast(msg: "Error occurred:\n$error");
       }
@@ -266,7 +256,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
                 SizedBox(height: 16),
-                           ],
+              ],
             ),
           ),
         ),
@@ -316,3 +306,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 }
+
+
+
+
