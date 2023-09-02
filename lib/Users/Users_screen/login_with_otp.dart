@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:deliveryx/Users/Users_screen/home_screens.dart';
+import 'package:deliveryx/Users/Users_screen/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -137,7 +138,7 @@ class _LoginScreenState extends State<LoginScreenOTP> {
                 ),
                 SizedBox(height: 16),
                 Center(
-                  child: Text('Or sign in with'),
+                  child: Text('Or'),
                 ),
                 SizedBox(height: 16),
                 Center(
@@ -146,11 +147,11 @@ class _LoginScreenState extends State<LoginScreenOTP> {
                       ElevatedButton.icon(
                         onPressed: () {
                           // Perform sign up with Google logic
-                          //     Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //       builder: (context) => SignInWithGoogle()),
-                          // );
+                              Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LoginScreen()),
+                          );
                         },
                         icon: FaIcon(
                           FontAwesomeIcons.google,
@@ -158,7 +159,7 @@ class _LoginScreenState extends State<LoginScreenOTP> {
                           size: 15,
                         ),
                         label: Text(
-                          'Sign in with Google',
+                          'Login with Email',
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 18,
@@ -179,32 +180,32 @@ class _LoginScreenState extends State<LoginScreenOTP> {
                         ),
                       ),
                       SizedBox(height: 8),
-                      ElevatedButton.icon(
-                        onPressed: () {
-                          // Perform sign up with apple logic
-                        },
-                        icon: Icon(Icons.apple_outlined, color: Colors.black),
-                        label: Text(
-                          'Sign in with Apple',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 18,
-                          ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          padding: EdgeInsets.all(20),
-                          side: BorderSide(
-                            width: 2,
-                            color: Color(0xFFA084E8),
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                          ),
-                          elevation: 5,
-                          minimumSize: Size(double.infinity, 0), // Full width
-                        ),
-                      ),
+                      // ElevatedButton.icon(
+                      //   onPressed: () {
+                      //     // Perform sign up with apple logic
+                      //   },
+                      //   icon: Icon(Icons.apple_outlined, color: Colors.black),
+                      //   label: Text(
+                      //     'Sign in with Apple',
+                      //     style: TextStyle(
+                      //       color: Colors.black,
+                      //       fontSize: 18,
+                      //     ),
+                      //   ),
+                      //   style: ElevatedButton.styleFrom(
+                      //     backgroundColor: Colors.white,
+                      //     padding: EdgeInsets.all(20),
+                      //     side: BorderSide(
+                      //       width: 2,
+                      //       color: Color(0xFFA084E8),
+                      //     ),
+                      //     shape: RoundedRectangleBorder(
+                      //       borderRadius: BorderRadius.circular(30.0),
+                      //     ),
+                      //     elevation: 5,
+                      //     minimumSize: Size(double.infinity, 0), // Full width
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
@@ -585,7 +586,7 @@ class _OTPInputSectionState extends State<OTPInputSection> {
           backgroundColor: Color.fromARGB(255, 125, 113, 241),
           textColor: Colors.white,
           fontSize: 16.0);
-      Navigator.push(context, MaterialPageRoute(builder: (c) => HomeScreen()));
+      Navigator.push(context, MaterialPageRoute(builder: (c) => Onboarding()));
     } catch (e) {
       print(e);
     }
@@ -619,6 +620,7 @@ class _OTPInputSectionState extends State<OTPInputSection> {
         SizedBox(height: 32),
         ElevatedButton(
           onPressed: () {
+
             verifyOTP();
           },
           child: Text(

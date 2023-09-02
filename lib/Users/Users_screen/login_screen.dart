@@ -1,3 +1,4 @@
+import 'package:deliveryx/Users/Users_screen/Onboarding.dart';
 import 'package:deliveryx/Users/Users_screen/login_with_otp.dart';
 import 'package:flutter/material.dart';
 import 'package:deliveryx/Users/Users_screen/registration.dart';
@@ -128,7 +129,9 @@ class _LoginScreenState extends State<LoginScreen> {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                _login();
+                 Navigator.push(context,
+                        MaterialPageRoute(builder: (c) => Onboarding()));
+                
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
@@ -185,22 +188,22 @@ class _LoginScreenState extends State<LoginScreen> {
               ],
             ),
             SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // Perform Google sign-up logic here
-              },
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                primary: Color.fromARGB(255, 241, 240, 240),
-                onPrimary: Color.fromARGB(255, 0, 0, 0),
-              ),
-              // icon: Image.asset(
-              // 'path_to_google_icon.png'), // Replace with the actual path
+            // ElevatedButton(
+            //   onPressed: () {
+            //     // Perform Google sign-up logic here
+            //   },
+            //   style: ElevatedButton.styleFrom(
+            //     shape: RoundedRectangleBorder(
+            //       borderRadius: BorderRadius.circular(30),
+            //     ),
+            //     primary: Color.fromARGB(255, 241, 240, 240),
+            //     onPrimary: Color.fromARGB(255, 0, 0, 0),
+            //   ),
+            //   // icon: Image.asset(
+            //   // 'path_to_google_icon.png'), // Replace with the actual path
 
-              child: Text('Sign up with Google'),
-            ),
+            //   child: Text('Sign up with Google'),
+            // ),
           ],
         ),
       ),

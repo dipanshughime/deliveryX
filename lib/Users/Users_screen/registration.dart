@@ -1,6 +1,7 @@
 import 'package:deliveryx/Users/Users_screen/Onboarding.dart';
 import 'package:deliveryx/Users/Users_screen/home_screens.dart';
 import 'package:deliveryx/Users/Users_screen/login_screen.dart';
+import 'package:deliveryx/Users/Users_screen/login_with_otp.dart';
 import 'package:deliveryx/Users/global_user/global_user.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -255,82 +256,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   onPressed: () {
                     // Implement Already Have Account logic here
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (c) => LoginScreen()));
+                        MaterialPageRoute(builder: (c) => LoginScreenOTP()));
                   },
-                  child: Text(
-                    'Already have an account? Sign in',
-                    style: TextStyle(color: Colors.black),
+                  child: Center(
+                    child: Text(
+                      'Already have an account? Sign in',
+                      style: TextStyle(color: Colors.black),
+                    ),
                   ),
                 ),
                 SizedBox(height: 16),
-                Center(
-                  child: Text('Or sign in with'),
-                ),
-                SizedBox(height: 16),
-                Center(
-                  child: Column(
-                    children: [
-                      ElevatedButton.icon(
-                        onPressed: () {
-                          // Perform sign up with Google logic
-                        },
-                        icon: FaIcon(
-                          FontAwesomeIcons.google,
-                          color: Colors.black,
-                          size: 15,
-                        ),
-                        label: Text(
-                          'Sign in with Google',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 18,
-                          ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          padding: EdgeInsets.all(20),
-                          side: BorderSide(
-                            width: 2,
-                            color: Color(0xFFA084E8),
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                          ),
-                          elevation: 5,
-                          minimumSize: Size(double.infinity, 0), // Full width
-                        ),
-                      ),
-                      SizedBox(height: 8),
-                      ElevatedButton.icon(
-                        onPressed: () {
-                          // Perform sign up with apple logic
-                        },
-                        icon: Icon(Icons.apple_outlined, color: Colors.black),
-                        label: Text(
-                          'Sign in with Apple',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 18,
-                          ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          padding: EdgeInsets.all(20),
-                          side: BorderSide(
-                            width: 2,
-                            color: Color(0xFFA084E8),
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                          ),
-                          elevation: 5,
-                          minimumSize: Size(double.infinity, 0), // Full width
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+                           ],
             ),
           ),
         ),
