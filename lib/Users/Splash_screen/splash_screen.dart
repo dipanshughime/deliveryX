@@ -1,7 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:deliveryx/Users/Users_screen/Sender/homepage.dart';
+import 'package:deliveryx/Users/Users_screen/Traveller/homepage.dart';
+import 'package:deliveryx/Users/Users_screen/home_screens.dart';
+import 'package:deliveryx/Users/Users_screen/login_screen.dart';
 import 'package:deliveryx/Users/Users_screen/login_with_otp.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-
 
 void main() {
   runApp(MaterialApp(
@@ -13,11 +18,49 @@ void main() {
 class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Delayed navigation to home page after 3 seconds
-    Future.delayed(Duration(seconds: 5), () {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => LoginScreenOTP()),
-      );
+    Future<User?> checkSession() async {
+      return FirebaseAuth.instance.currentUser;
+    }
+
+    Future<String?> checkUserRole() async {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        // User is signed in, check their role in your Firebase Firestore users collection.
+        // Replace 'your_firestore_collection' with your actual collection name.
+        final userData = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .get();
+
+        if (userData.exists) {
+          final role = userData['role'];
+          return role.toString();
+        }
+      }
+      return null; // User is not signed in or their role is not found.
+    }
+
+    // Delayed navigation based on the session and user role
+    Future.delayed(Duration(seconds: 5), () async {
+      final user = await checkSession();
+      if (user != null) {
+        final role = await checkUserRole();
+        if (role != null) {
+          if (role == '0') {
+            // User is a sender, navigate to sender homepage
+            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Homepage_Sender()));
+          } else if (role == '1') {
+            // User is a traveler, navigate to traveler homepage
+            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
+          }
+        } else if(role =="-1") {
+          // Role not found, navigate to login page
+          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginScreen()));
+        }
+      } else {
+        // User is not signed in, navigate to login page
+        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginScreen()));
+      }
     });
 
     return Scaffold(
@@ -45,93 +88,80 @@ class SplashScreen extends StatelessWidget {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import 'package:deliveryx/pallete.dart';
-// import 'package:deliveryx/Users/Users_screen/registration.dart';
+// import 'package:deliveryx/Users/Users_screen/Sender/homepage.dart';
+// import 'package:deliveryx/Users/Users_screen/home_screens.dart';
+// import 'package:deliveryx/Users/Users_screen/login_with_otp.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:flutter/material.dart';
-// import 'package:flutter/services.dart';
-// import 'package:animate_do/animate_do.dart';
+// import 'package:flutter_spinkit/flutter_spinkit.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 
-// class SplashScreen extends StatefulWidget {
-//   const SplashScreen({super.key});
 
-//   @override
-//   State<SplashScreen> createState() => _SplashScreenState();
+// void main() {
+//   runApp(MaterialApp(
+//     debugShowCheckedModeBanner: false,
+//     home: SplashScreen(),
+//   ));
 // }
 
-// class _SplashScreenState extends State<SplashScreen>
-//     with SingleTickerProviderStateMixin {
-//   @override
-//   void initState() {
-//     // TODO: implement initState
-//     super.initState();
-//     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
 
-//     Future.delayed(Duration(seconds: 4), () {
-//       Navigator.of(context)
-//           .pushReplacement(MaterialPageRoute(builder: (_) => RegisterScreen()));
-//     });
-//   }
 
-//   @override
-//   void dispose() {
-//     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-//         overlays: SystemUiOverlay.values);
-//     // TODO: implement dispose
-//     super.dispose();
-//   }
-
+// class SplashScreen extends StatelessWidget {
+  
 //   @override
 //   Widget build(BuildContext context) {
+//     Future<bool> checkSession() async {
+//   final user = FirebaseAuth.instance.currentUser;
+//   return user != null;
+// }
+
+    
+//    // Delayed navigation based on the session
+//     Future.delayed(Duration(seconds: 5), () async {
+//       bool isLoggedIn = await checkSession();
+//       if (isLoggedIn) {
+//         // User is logged in, navigate to the home page
+//         Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Homepage_Sender()));
+//       } else {
+//         // User is not logged in, navigate to the login page
+//         Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => HomeScreen()));
+//       }
+//     });
+
 //     return Scaffold(
-//         body: Container(
-//       width: double.infinity,
-//       decoration: const BoxDecoration(
-//         gradient: LinearGradient(
-//           colors: [Pallete.splash1, Pallete.splash2],
+//       body: Center(
+//         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           children: [
+//             Image(
+//               image: AssetImage("assets/images/logo.png"),
+//               width: 600,
+//             ),
+//             SizedBox(height: 30),
+//             SpinKitSquareCircle(
+//               color: Colors.grey,
+//               size: 20.0,
+//             ),
+//           ],
 //         ),
 //       ),
-//       child: Column(
-//         mainAxisAlignment: MainAxisAlignment.center,
-//         children: [
-//           SlideInDown(
-//             duration: Duration(seconds: 2),
-//             child: Image.asset(
-//               'assets/images/delivery-girl.png',
-//               height: 150,
-//               width: 160,
-//             ),
-//           ),
-//           SizedBox(
-//             height: 50,
-//           ),
-//           // Text(
-//           //   'DeliveryX',
-//           //   style: TextStyle(fontSize: 35),
-//           // ),
-//           SlideInLeft(
-//             duration: Duration(seconds: 2),
-//             child: Image.asset(
-//               'assets/images/DELIVERYX.png',
-//             ),
-//           ),
-//         ],
-//       ),
-//     ));
+//     );
 //   }
 // }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

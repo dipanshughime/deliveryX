@@ -1,5 +1,29 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:deliveryx/Users/Users_screen/Sender/package_info.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import '../../../services/firestore.dart';
+
+class PackageData {
+  String senderName = '';
+  String senderPhone = '';
+  String senderAddress = '';
+  String senderCity = '';
+  String senderState = '';
+  String senderPincode = '';
+
+  String receiverName = '';
+  String receiverPhone = '';
+  String receiverAddress = '';
+  String receiverCity = '';
+  String receiverState = '';
+  String receiverPincode = '';
+}
+
+
+
+
 
 class OrderDetails extends StatefulWidget {
   const OrderDetails({
@@ -13,6 +37,72 @@ class OrderDetails extends StatefulWidget {
 //The main Page of Order
 class _OrderDetailsState extends State<OrderDetails> {
   final _formKey = GlobalKey<FormState>();
+  final FirestoreService _firestoreService = FirestoreService();
+  
+  TextEditingController senderName = TextEditingController();
+  TextEditingController senderPhone = TextEditingController();
+  TextEditingController senderAddress = TextEditingController();
+  TextEditingController senderCity = TextEditingController();
+  TextEditingController senderState = TextEditingController();
+  TextEditingController senderPincode = TextEditingController();
+
+  TextEditingController receiverName = TextEditingController();
+  TextEditingController receiverPhone = TextEditingController();
+  TextEditingController receiverAddress = TextEditingController();
+  TextEditingController receiverCity = TextEditingController();
+  TextEditingController receiverState = TextEditingController();
+  TextEditingController receiverPincode = TextEditingController();
+
+  final PackageData packageData = PackageData();
+
+
+User? currentUser;
+
+  @override
+  void initState() {
+    super.initState();
+    currentUser = FirebaseAuth.instance.currentUser;
+    print(currentUser);
+  }
+  
+  Future<void> saveOrder(PackageData packageData) async {
+  if (currentUser == null) {
+    // Handle the case where the user is not logged in
+    return;
+  }
+
+  final senderId = currentUser!.uid;
+  final ordersCollection = FirebaseFirestore.instance
+      .collection('users')
+      .doc(senderId)
+      .collection('orders');
+
+  await ordersCollection.add({
+    "userid": senderId,
+    'Sender Name': packageData.senderName,
+    'Sender Phone': packageData.senderPhone,
+    'Sender Address': packageData.senderAddress,
+    'Sender City': packageData.senderCity,
+    'Sender State': packageData.senderState,
+    'Sender Pincode': packageData.senderPincode,
+    'Receiver Name': packageData.receiverName,
+    'Receiver Phone': packageData.receiverPhone,
+    'Receiver Address': packageData.receiverAddress,
+    'Receiver City': packageData.receiverCity,
+    'Receiver State': packageData.receiverState,
+    'Receiver Pincode': packageData.receiverPincode,
+    'Status': 'Active',
+    'Time Stamp': FieldValue.serverTimestamp(),
+  });
+
+
+  }
+
+
+
+
+  
+
 
   @override
   Widget build(BuildContext context) {
@@ -64,10 +154,90 @@ class _OrderDetailsState extends State<OrderDetails> {
                     Container(
                       height: MediaQuery.of(context).size.height,
                       child: TabBarView(children: [
-                        SenderInfoTab(),
-                        TravelerInfoTab(),
-                      ]),
+                        SenderInfoTab(
+                          nameController: senderName,
+                          phoneController: senderPhone,
+                          addressController: senderAddress,
+                          cityController:senderCity,
+                          stateController: senderState,
+                          pincodeController : senderPincode,
+                          packageData : packageData,
+                        ),
+                        TravelerInfoTab(
+                          nameController: receiverName,
+                          phoneController: receiverPhone,
+                          addressController: receiverAddress,
+                          cityController:receiverCity,
+                          stateController: receiverState,
+                          pincodeController : receiverPincode,
+                          packageData : packageData,
+                        ),
+                      ]
+                      ),
+
+                      
+                      
                     ),
+
+                    SizedBox(height: 16),
+
+                Center(
+                  child: ElevatedButton(
+                    onPressed: () async{
+
+                      final packageInfoWidget = PackageInfo(
+      senderName: packageData.senderName,
+      senderPhone: packageData.senderPhone,
+      senderAddress: packageData.senderAddress,
+      senderCity: packageData.senderCity,
+      senderState: packageData.senderState,
+      senderPincode: packageData.senderPincode,
+      receiverName: packageData.receiverName,
+      receiverPhone: packageData.receiverPhone,
+      receiverAddress: packageData.receiverAddress,
+      receiverCity: packageData.receiverCity,
+      receiverState: packageData.receiverState,
+      receiverPincode: packageData.receiverPincode,
+    );
+
+                      
+
+                    //  await saveOrder(packageData
+                    //   // packageData.senderName,
+                    //   // packageData.senderPhone,
+                    //   // packageData.senderAddress,
+                    //   // packageData.senderCity,
+                    //   // packageData.senderState,
+                    //   // packageData.senderPincode,
+                    //   // packageData.receiverName,
+                    //   // packageData.receiverPhone,
+                    //   // packageData.receiverAddress,
+                    //   // packageData.receiverCity,
+                    //   // packageData.receiverState,
+                    //   // packageData.receiverPincode
+                    //  );
+
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => packageInfoWidget
+                    ),
+                  );
+                      // Handle button press here
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.purple[200],
+                      padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                    child: Text(
+                      "Enter Package Details",
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  ),
+                ),
 
                     // Wrap TabBarView in a ListView with AlwaysScrollableScrollPhysics
                     // Expanded(
@@ -109,7 +279,26 @@ class _OrderDetailsState extends State<OrderDetails> {
 }
 
 class SenderInfoTab extends StatefulWidget {
-  const SenderInfoTab({super.key});
+  final TextEditingController nameController;
+  final TextEditingController phoneController;
+  final TextEditingController addressController;
+  final TextEditingController cityController;
+  final TextEditingController stateController;
+  final TextEditingController pincodeController;
+  final PackageData packageData;
+
+  const SenderInfoTab({
+    Key? key,
+    required this.nameController,
+    required this.phoneController,
+    required this.addressController,
+    required this.cityController,
+    required this.stateController,
+    required this.pincodeController,
+     required this.packageData,
+
+  }) : super(key: key);
+  
 
   @override
   State<SenderInfoTab> createState() => _SenderInfoTabState();
@@ -117,6 +306,10 @@ class SenderInfoTab extends StatefulWidget {
 
 class _SenderInfoTabState extends State<SenderInfoTab> {
   final _formKey = GlobalKey<FormState>();
+  
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -126,10 +319,14 @@ class _SenderInfoTabState extends State<SenderInfoTab> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min, // Ensure minimum height
             children: [
+              
               buildTextField(
+                
                 'Name',
                 Icons.person,
                 'Enter Senders Name',
+                widget.nameController,
+                
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Name is required';
@@ -142,6 +339,7 @@ class _SenderInfoTabState extends State<SenderInfoTab> {
                 'Phone Number',
                 Icons.phone,
                 'Enter Senders number',
+                widget.phoneController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Phone Number is required';
@@ -157,6 +355,7 @@ class _SenderInfoTabState extends State<SenderInfoTab> {
                 'Address',
                 Icons.pin,
                 'Enter Building Number/Block/Landmark',
+                widget.addressController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Location is required';
@@ -169,6 +368,7 @@ class _SenderInfoTabState extends State<SenderInfoTab> {
                 'City',
                 Icons.location_city_outlined,
                 'Enter Senders City Name',
+                widget.cityController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'City is required';
@@ -181,6 +381,7 @@ class _SenderInfoTabState extends State<SenderInfoTab> {
                 'State',
                 Icons.location_on,
                 'Enter Senders State',
+                widget.stateController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'State is required';
@@ -193,6 +394,7 @@ class _SenderInfoTabState extends State<SenderInfoTab> {
                 'Pin Code',
                 Icons.location_city_outlined,
                 'Enter Senders Pin Code',
+                widget.pincodeController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'PinCode is required';
@@ -204,41 +406,42 @@ class _SenderInfoTabState extends State<SenderInfoTab> {
                 },
               ),
               SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    // Perform registration logic
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //       builder: (context) => LoginScreen()),
-                    // );
-                  }
-                },
-                child: Text(
-                  'Enter Package Details',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                  ),
-                ),
-                style: ElevatedButton.styleFrom(
-                  primary: Color(0xFFA084E8), // Button color
-                  onPrimary: Colors.black, // Text color
-                  padding: EdgeInsets.all(20),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0),
-                  ),
-                  elevation: 5,
-                  minimumSize: Size(double.infinity, 0), // Full width
-                ),
-              ),
+              // ElevatedButton(
+              //   onPressed: () {
+              //     if (_formKey.currentState!.validate()) {
+              //       // Perform registration logic
+              //       // Navigator.push(
+              //       //   context,
+              //       //   MaterialPageRoute(
+              //       //       builder: (context) => LoginScreen()),
+              //       // );
+              //     }
+              //   },
+              //   child: Text(
+              //     'Enter Package Details',
+              //     style: TextStyle(
+              //       color: Colors.white,
+              //       fontSize: 18,
+              //     ),
+              //   ),
+              //   style: ElevatedButton.styleFrom(
+              //     primary: Color(0xFFA084E8), // Button color
+              //     onPrimary: Colors.black, // Text color
+              //     padding: EdgeInsets.all(20),
+              //     shape: RoundedRectangleBorder(
+              //       borderRadius: BorderRadius.circular(30.0),
+              //     ),
+              //     elevation: 5,
+              //     minimumSize: Size(double.infinity, 0), // Full width
+              //   ),
+              // ),
             ]),
       ),
     );
   }
 
   Widget buildTextField(String label, IconData icon, String hint,
+      TextEditingController controller,
       {bool isPassword = false,
       TextInputType? keyboardType,
       FormFieldValidator<String>? validator}) {
@@ -255,7 +458,23 @@ class _SenderInfoTabState extends State<SenderInfoTab> {
         TextFormField(
           obscureText: isPassword,
           keyboardType: keyboardType,
-          validator: validator, // Validator function
+          validator: validator,
+          onChanged: (value) {
+    // Update the corresponding field in packageData
+    if (label == 'Name') {
+      widget.packageData.senderName = value;
+    } else if (label == 'Phone Number') {
+      widget.packageData.senderPhone = value;
+    } else if (label == 'Address') {
+      widget.packageData.senderAddress = value;
+    } else if (label == 'City') {
+      widget.packageData.senderCity = value;
+    } else if (label == 'State') {
+      widget.packageData.senderState = value;
+    } else if (label == 'Pin Code') {
+      widget.packageData.senderPincode = value;
+    }
+  }, // Validator function
           decoration: InputDecoration(
             prefixIcon: Icon(icon, color: Color(0xFFA084E8)),
             hintText: hint,
@@ -276,7 +495,26 @@ class _SenderInfoTabState extends State<SenderInfoTab> {
 }
 
 class TravelerInfoTab extends StatefulWidget {
-  const TravelerInfoTab({super.key});
+  final TextEditingController nameController;
+  final TextEditingController phoneController;
+  final TextEditingController addressController;
+  final TextEditingController cityController;
+  final TextEditingController stateController;
+  final TextEditingController pincodeController;
+  final PackageData packageData;
+
+  const TravelerInfoTab({
+    Key? key,
+    required this.nameController,
+    required this.phoneController,
+    required this.addressController,
+    required this.cityController,
+    required this.stateController,
+    required this.pincodeController,
+     required this.packageData,
+
+  }) : super(key: key);
+  
 
   @override
   State<TravelerInfoTab> createState() => _TravelerInfoTabState();
@@ -297,6 +535,7 @@ class _TravelerInfoTabState extends State<TravelerInfoTab> {
                 'Name',
                 Icons.person,
                 'Enter Receivers Name',
+                widget.nameController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Name is required';
@@ -309,6 +548,7 @@ class _TravelerInfoTabState extends State<TravelerInfoTab> {
                 'Phone Number',
                 Icons.phone,
                 'Enter Receivers number',
+                widget.phoneController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Phone Number is required';
@@ -324,6 +564,7 @@ class _TravelerInfoTabState extends State<TravelerInfoTab> {
                 'Address',
                 Icons.pin,
                 'Enter Building Number/Block/Landmark',
+                widget.addressController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Location is required';
@@ -336,6 +577,7 @@ class _TravelerInfoTabState extends State<TravelerInfoTab> {
                 'City',
                 Icons.location_city_outlined,
                 'Enter Receivers City Name',
+                widget.cityController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'City is required';
@@ -348,6 +590,7 @@ class _TravelerInfoTabState extends State<TravelerInfoTab> {
                 'State',
                 Icons.location_city_outlined,
                 'Enter Receivers State',
+                widget.stateController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'State is required';
@@ -360,6 +603,7 @@ class _TravelerInfoTabState extends State<TravelerInfoTab> {
                 'Pin Code',
                 Icons.location_city_outlined,
                 'Enter Receivers Pin Code',
+                widget.pincodeController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'PinCode is required';
@@ -412,41 +656,46 @@ class _TravelerInfoTabState extends State<TravelerInfoTab> {
               //   ),
               // ]),
               SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    // Perform registration logic
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => PackageInfo()),
-                    );
-                  }
-                },
-                child: Text(
-                  'Enter Package Details',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                  ),
-                ),
-                style: ElevatedButton.styleFrom(
-                  primary: Color(0xFFA084E8), // Button color
-                  onPrimary: Colors.black, // Text color
-                  padding: EdgeInsets.all(20),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0),
-                  ),
-                  elevation: 5,
-                  minimumSize: Size(double.infinity, 0), // Full width
-                ),
-              ),
+              // ElevatedButton(
+              //   onPressed: () {
+                   
+      
+              //     if (_formKey.currentState!.validate()) {
+
+                    
+              //       // Perform registration logic
+              //       Navigator.push(
+              //         context,
+              //         MaterialPageRoute(
+              //             builder: (context) => PackageInfo()),
+              //       );
+              //     }
+              //   },
+              //   child: Text(
+              //     'Enter Package Details',
+              //     style: TextStyle(
+              //       color: Colors.white,
+              //       fontSize: 18,
+              //     ),
+              //   ),
+              //   style: ElevatedButton.styleFrom(
+              //     primary: Color(0xFFA084E8), // Button color
+              //     onPrimary: Colors.black, // Text color
+              //     padding: EdgeInsets.all(20),
+              //     shape: RoundedRectangleBorder(
+              //       borderRadius: BorderRadius.circular(30.0),
+              //     ),
+              //     elevation: 5,
+              //     minimumSize: Size(double.infinity, 0), // Full width
+              //   ),
+              // ),
             ]),
       ),
     );
   }
 
   Widget buildTextField(String label, IconData icon, String hint,
+      TextEditingController controller,
       {bool isPassword = false,
       TextInputType? keyboardType,
       FormFieldValidator<String>? validator}) {
@@ -463,7 +712,23 @@ class _TravelerInfoTabState extends State<TravelerInfoTab> {
         TextFormField(
           obscureText: isPassword,
           keyboardType: keyboardType,
-          validator: validator, // Validator function
+          validator: validator,
+          onChanged: (value) {
+    // Update the corresponding field in packageData
+    if (label == 'Name') {
+      widget.packageData.receiverName = value;
+    } else if (label == 'Phone Number') {
+      widget.packageData.receiverPhone = value;
+    } else if (label == 'Address') {
+      widget.packageData.receiverAddress = value;
+    } else if (label == 'City') {
+      widget.packageData.receiverCity = value;
+    } else if (label == 'State') {
+      widget.packageData.receiverState = value;
+    } else if (label == 'Pin Code') {
+      widget.packageData.receiverPincode = value;
+    }
+  },  // Validator function
           decoration: InputDecoration(
             prefixIcon: Icon(icon, color: Color(0xFFA084E8)),
             hintText: hint,

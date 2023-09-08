@@ -1,7 +1,10 @@
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:deliveryx/Users/Users_screen/Sender/order_summary.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -11,11 +14,28 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
 
+   Stream<QuerySnapshot>? _stream;
+
+  @override
+  void initState() {
+    super.initState();
+
+    final currentUser = FirebaseAuth.instance.currentUser;
+    _stream = FirebaseFirestore.instance
+        .collectionGroup("orders")
+        .where("Status", isEqualTo: "Active")
+        .orderBy("userid", descending: true)
+        .where("userid", isNotEqualTo: currentUser?.uid)
+        .orderBy("Timestamp", descending: true)
+        .snapshots();
+  }
+
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -104,43 +124,65 @@ class _HomePageState extends State<HomePage> {
             ),
 
             //listview
-            Padding(
+               Padding(
               padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
               child: Container(
                 height: 350,
-                child: ListView.builder(
-                  itemCount: 6,
-                  itemBuilder: (BuildContext context, int index) {
-                    return SingleChildScrollView(
-                      child: Card(
-                        child: GestureDetector(
-                          onTap: () {
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: _stream,
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return Center(child: CircularProgressIndicator());
+                    }
 
-                            Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => OrderClick()),
-                          );
-                            // Add your onPressed or onTap logic here
-                            //navigate wala code
-                          },
-                          child: ListTile(
-                            leading: Image.asset(
-                              'assets/images/package.png',
-                              width: 40,
-                              height: 40,
+                    final orders = snapshot.data!.docs;
+
+                    if (orders.isEmpty) {
+                      return Center(child: Text("No recent orders"));
+                    }
+
+                    return ListView.builder(
+                      itemCount: orders.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final orderData = orders[index].data() as Map<String, dynamic>;
+                        final orderId = orders[index].id;
+                        final timestamp = orderData['Timestamp'] as Timestamp;
+                        final formattedDate = DateFormat('yyyy-MM-dd HH:mm').format(timestamp.toDate());
+
+                        return SingleChildScrollView(
+                          child: Card(
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => OrderClick(),
+                                  ),
+                                );
+                              },
+                              child: ListTile(
+                                leading: Image.asset(
+                                  'assets/images/package.png',
+                                  width: 40,
+                                  height: 40,
+                                ),
+                                title: Text(orderId ?? ''),
+                                subtitle: Text(formattedDate ?? ''),
+                                trailing: Text(orderData['Cost'] ?? 'Rs.400'),
+                              ),
                             ),
-                            title: Text('dftyeusajkj'),
-                            subtitle: Text('12th oct 2023'),
-                            trailing: Text('Delivered'),
                           ),
-                        ),
-                      ),
+                        );
+                      },
                     );
                   },
                 ),
               ),
             ),
+
+
+
+
           ],
         ),
       ),

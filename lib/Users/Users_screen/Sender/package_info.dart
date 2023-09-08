@@ -1,16 +1,102 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:deliveryx/Users/Users_screen/Sender/homepage.dart';
 import 'package:deliveryx/Users/Users_screen/Sender/order_summary.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '/util/colors.dart';
 
+
+
+
 class PackageInfo extends StatefulWidget {
+    String senderName;
+  String senderPhone;
+  String senderAddress;
+  String senderCity;
+  String senderState;
+  String senderPincode;
+
+  String receiverName;
+  String receiverPhone;
+  String receiverAddress;
+  String receiverCity;
+  String receiverState;
+  String receiverPincode;
+
+  PackageInfo({
+    required this.senderName,
+    required this.senderPhone,
+    required this.senderAddress,
+    required this.senderCity,
+    required this.senderState,
+    required this.senderPincode,
+    required this.receiverName,
+    required this.receiverPhone,
+    required this.receiverAddress,
+    required this.receiverCity,
+    required this.receiverState,
+    required this.receiverPincode,
+    // Other parameters specific to OrderDetails
+  });
   @override
   State<StatefulWidget> createState() {
-    return PackageFormState();
+    return PackageFormState(
+      senderName: senderName,
+    senderPhone: senderPhone,
+    senderAddress: senderAddress,
+    senderCity: senderCity,
+    senderState: senderState,
+    senderPincode: senderPincode,
+    receiverName:receiverName,
+    receiverPhone: receiverPhone,
+    receiverAddress:receiverAddress,
+    receiverCity: receiverCity,
+    receiverState: receiverState,
+    receiverPincode: receiverPincode,
+      
+
+    );
   }
 }
 
 class PackageFormState extends State<PackageInfo> {
+
+   final String senderName;
+  final String senderPhone;
+  final String senderAddress;
+  final String senderCity;
+  final String senderState;
+  final String senderPincode;
+  final String receiverName;
+  final String receiverPhone;
+  final String receiverAddress;
+  final String receiverCity;
+  final String receiverState;
+  final String receiverPincode;
+  // Other parameters specific to OrderDetails
+
+  PackageFormState({
+    required this.senderName,
+    required this.senderPhone,
+    required this.senderAddress,
+    required this.senderCity,
+    required this.senderState,
+    required this.senderPincode,
+    required this.receiverName,
+    required this.receiverPhone,
+    required this.receiverAddress,
+    required this.receiverCity,
+    required this.receiverState,
+    required this.receiverPincode,
+    // Other parameters specific to OrderDetails
+  });
+
+
+
+
+
+
+
   bool isInput1Visible = false;
   bool isInput2Visible = false;
   bool isChecked = false;
@@ -21,6 +107,126 @@ class PackageFormState extends State<PackageInfo> {
   var temp = 1;
   var temp2 = 0;
   TextEditingController _textEditingController = TextEditingController();
+  TextEditingController _textEditingController_description = TextEditingController();
+
+User? currentUser;
+
+@override
+  void initState() {
+    super.initState();
+    currentUser = FirebaseAuth.instance.currentUser;
+    print(currentUser);
+  }
+
+void addDataToFirestore() async {
+  final firestore = FirebaseFirestore.instance;
+  if (currentUser != null) {
+    final userId = currentUser!.uid; // Current user's ID
+
+    try {
+      final data = {
+        'Sender Name': senderName,
+        'Sender Phone': senderPhone,
+        'Sender Address': senderAddress,
+        'Sender City': senderCity,
+        'Sender State': senderState,
+        'Sender Pincode': senderPincode,
+        'Receiver Name': receiverName,
+        'Receiver Phone': receiverPhone,
+        'Receiver Address': receiverAddress,
+        'Receiver City': receiverCity,
+        'Receiver State':receiverState,
+        'Receiver Pincode': receiverPincode,
+        // Other parameters specific to OrderDetails
+        
+        'Package Value':  _textEditingController.text,
+        'Package Category': _dropdownValue1,
+        'Package Description':_textEditingController_description.text,
+        'Package Weight': _dropdownValue2,
+        'Package Size': _dropdownValue3,
+        'acceptedTerms': isChecked,
+        'userid': userId,
+        'Status': 'Active',
+        'Timestamp': FieldValue.serverTimestamp(),
+        
+      };
+
+      print(data);
+
+      final packageSubcollectionRef = FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection('orders');
+
+      await packageSubcollectionRef.add(data);
+    } catch (error) {
+      print('Error adding data to package subcollection: $error');
+    }
+  }
+}
+
+// void addDataToFirestore() async {
+//   final firestore = FirebaseFirestore.instance;
+// if (currentUser != null) {
+//   final userId = currentUser!.uid; // Current user's ID
+
+//    final ordersQuery = FirebaseFirestore.instance
+//       .collection('users')
+//       .doc(userId)
+//       .collection('orders')
+//       .orderBy('Time Stamp', descending: true)
+//       .limit(1);
+
+//   print(ordersQuery);
+
+//   ordersQuery.get().then((querySnapshot) {
+//     print(querySnapshot.docs);
+//     if (querySnapshot.docs.isNotEmpty) {
+      
+//       final latestOrderDocument = querySnapshot.docs.first;
+//       final latestOrderId = latestOrderDocument.id;
+//       print(latestOrderId);
+
+//       // Now you have the latest order ID, and you can add data to the package subcollection for that order
+//       final Data = {
+//         'packageValue': _textEditingController.text,
+//         'category': _dropdownValue1,
+//         'weight': _dropdownValue2,
+//         'size': _dropdownValue3,
+//         'acceptedTerms': isChecked,
+//       };
+
+//       final packageSubcollectionRef = FirebaseFirestore.instance
+//           .collection('users')
+//           .doc(userId)
+//           .collection('orders')
+//           .doc(latestOrderId)
+//           .collection('packages');
+
+//       packageSubcollectionRef.add(Data).then((value) {
+//         // Data added successfully to the package subcollection
+//       }).catchError((error) {
+//         print('Error adding data to package subcollection: $error');
+//       });
+//     } else {
+//       // No orders found for the current user
+//     }
+//   }).catchError((error) {
+//     print('Error retrieving latest order: $error');
+//   });
+// }
+
+
+
+// }
+
+
+
+
+
+
+ 
+
   void showAlert() {
     if (_textEditingController.text.isNotEmpty) {
       showDialog(
@@ -35,6 +241,7 @@ class PackageFormState extends State<PackageInfo> {
                 onPressed: () {
                   Navigator.of(context).pop();
                   temp2--;
+                  
                   showModalBottomSheet(
                     elevation: 0,
                     isDismissible: false,
@@ -103,7 +310,9 @@ class PackageFormState extends State<PackageInfo> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => OrderClick()),
+                                            builder: (context) => OrderClick(
+
+                                            )),
                                       );
                                     },
                                     style: ElevatedButton.styleFrom(
@@ -284,6 +493,7 @@ class PackageFormState extends State<PackageInfo> {
                     Visibility(
                       visible: isInput1Visible,
                       child: TextFormField(
+                        controller: _textEditingController_description,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please describe your parcel';
@@ -464,6 +674,7 @@ class PackageFormState extends State<PackageInfo> {
                                 temp2++;
                               }
                               if (temp2 == 0) {
+                                addDataToFirestore();
                                 showModalBottomSheet(
                                   elevation: 0,
                                   isDismissible: false,
@@ -543,7 +754,10 @@ class PackageFormState extends State<PackageInfo> {
                                                       context,
                                                       MaterialPageRoute(
                                                           builder: (context) =>
-                                                              OrderClick()),
+                                                              OrderClick(
+
+                                                                
+                                                              )),
                                                     );
                                                     // Your second button action
                                                   },

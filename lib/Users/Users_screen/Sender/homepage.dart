@@ -1,6 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:deliveryx/Users/Users_screen/Sender/order_details.dart';
 import 'package:deliveryx/Users/Users_screen/Sender/order_summary.dart';
+import 'package:deliveryx/Users/Users_screen/login_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class Homepage_Sender extends StatefulWidget {
   const Homepage_Sender({super.key});
@@ -11,6 +15,45 @@ class Homepage_Sender extends StatefulWidget {
 
 class _Homepage_SenderState extends State<Homepage_Sender> {
   int _currentIndex = 0;
+
+  Stream<QuerySnapshot>? _ordersStream;
+
+  @override
+  void initState() {
+    super.initState();
+    final currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+      _ordersStream = FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUser.uid)
+          .collection('orders')
+          .orderBy('Timestamp',descending: true)
+          .snapshots();
+    }
+  }
+
+  void _signOut() async {
+  try {
+    final currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+      // Update the user's role to -1 in the user collection
+      await FirebaseFirestore.instance.collection('users').doc(currentUser.uid).update({
+        'role': -1,
+      });
+    }
+
+    // Sign out the user
+    await FirebaseAuth.instance.signOut();
+
+    // Navigate to the login screen after successful logout
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => LoginScreen()));
+  } catch (e) {
+    print("Error signing out: $e");
+  }
+}
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,10 +105,13 @@ class _Homepage_SenderState extends State<Homepage_Sender> {
                             ),
                           ],
                         ),
-                        Image(
-                          image: AssetImage("assets/images/user.png"),
-                          width: 50,
-                        ),
+                        GestureDetector(
+                          onTap: _signOut, // Call the _signOut function when tapped
+                          child: Image(
+                            image: AssetImage("assets/images/user.png"),
+                            width: 50,
+                          ),
+                        )
                       ],
                     ),
                   ],
@@ -88,54 +134,70 @@ class _Homepage_SenderState extends State<Homepage_Sender> {
             ),
 
             //listview
-            Padding(
+                       Padding(
               padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
               child: Container(
                 height: 350,
-                child: ListView.builder(
-                  itemCount: 6,
-                  itemBuilder: (BuildContext context, int index) {
-                    return SingleChildScrollView(
-                      child: Card(
-                        child: GestureDetector(
-                          onTap: () {
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: _ordersStream,
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return Center(child: CircularProgressIndicator());
+                    }
 
-                            Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => OrderClick()),
-                          );
-                            // Add your onPressed or onTap logic here
-                            //navigate wala code
-                          },
-                          child: ListTile(
-                            leading: Image.asset(
-                              'assets/images/package.png',
-                              width: 40,
-                              height: 40,
+                    final orders = snapshot.data!.docs;
+
+                    if (orders.isEmpty) {
+                      return Center(child: Text("No recent orders"));
+                    }
+
+                    return ListView.builder(
+                      itemCount: orders.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final orderData = orders[index].data() as Map<String, dynamic>;
+                        final orderId = orders[index].id;
+                        final timestamp = orderData['Timestamp'] as Timestamp;
+                        final formattedDate = DateFormat('yyyy-MM-dd HH:mm').format(timestamp.toDate());
+
+                        return SingleChildScrollView(
+                          child: Card(
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => OrderClick(),
+                                  ),
+                                );
+                              },
+                              child: ListTile(
+                                leading: Image.asset(
+                                  'assets/images/package.png',
+                                  width: 40,
+                                  height: 40,
+                                ),
+                                title: Text(orderId ?? ''),
+                                subtitle: Text(formattedDate ?? ''),
+                                trailing: Text(orderData['Status'] ?? ''),
+                              ),
                             ),
-                            title: Text('dftyeusajkj'),
-                            subtitle: Text('12th oct 2023'),
-                            trailing: Text('Delivered'),
                           ),
-                        ),
-                      ),
+                        );
+                      },
                     );
                   },
                 ),
               ),
             ),
-
             //button
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => OrderDetails()),
-                          );
+                    context,
+                    MaterialPageRoute(builder: (context) => OrderDetails()),
+                  );
                 },
                 child: Text(
                   'Send Package',

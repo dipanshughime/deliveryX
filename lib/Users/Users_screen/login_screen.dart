@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'package:flutter/material.dart';
 import '../../services/auth.dart';
 import 'registration.dart';
@@ -18,15 +19,26 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController passwordTextEditingController =
       TextEditingController();
   bool passwordVisible = false;
+  
+
 
   void _login() async {
+
     try {
       final user = await _authService.signInWithEmailAndPassword(
         emailTextEditingController.text.trim(),
         passwordTextEditingController.text.trim(),
       );
 
+
+
+      
+
       if (user != null) {
+         
+         
+         
+        // await storage.write(key: "token", value: "your_token_here");
         Navigator.push(context, MaterialPageRoute(builder: (c) => Onboarding()));
       } else {
         // Handle login failure
@@ -34,9 +46,11 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     } catch (error) {
       // Handle login error
+      print(error);
       _showDialog("Login Error", "An error occurred while logging in.");
     }
   }
+
 
   void _showDialog(String title, String content) {
     showDialog(

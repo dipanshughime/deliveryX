@@ -1,7 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
+
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  
+
 
    Future<User?> getCurrentUser() async {
     return _auth.currentUser;
@@ -32,6 +35,11 @@ class AuthService {
         email: email.trim(),
         password: password.trim(),
       );
+
+   
+
+      
+
       return authResult.user;
     } catch (error) {
       return null;
