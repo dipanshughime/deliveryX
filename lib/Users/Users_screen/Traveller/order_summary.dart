@@ -175,7 +175,7 @@ class _OrderClickTState extends State<OrderClickT> {
                               color: Colors.grey,
                             ),
                             SizedBox(width: 8),
-                            Text('kg', style: TextStyle(fontSize: 16)),
+                            Text('cm', style: TextStyle(fontSize: 16)),
                           ],
                         ),
                       ),
