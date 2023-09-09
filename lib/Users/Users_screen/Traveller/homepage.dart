@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:deliveryx/Users/Users_screen/Sender/order_summary.dart';
+import 'package:deliveryx/Users/Users_screen/Traveller/order_summary.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -30,6 +31,10 @@ class _HomePageState extends State<HomePage> {
         .snapshots();
   }
 
+  late String location;
+  late String date;
+  late String cost;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,9 +60,6 @@ class _HomePageState extends State<HomePage> {
                               fontWeight: FontWeight.w800,
                               color: Colors.white,
                             )),
-                        // SizedBox(
-                        //   width: 200,
-                        // ),
                         Icon(
                           Icons.filter_alt_rounded,
                           size: 30,
@@ -141,9 +143,20 @@ class _HomePageState extends State<HomePage> {
                     return ListView.builder(
                       itemCount: orders.length,
                       itemBuilder: (BuildContext context, int index) {
+                        final Random random = new Random();
+                        final int cost = random.nextInt(601) + 701;
                         final orderData =
                             orders[index].data() as Map<String, dynamic>;
-                        final orderId = orders[index].id;
+                        final senderName = orderData['Sender Name'] as String?;
+                        final receiverName =
+                            orderData['Receiver Name'] as String?;
+                        final receiverAddress =
+                            orderData['Receiver Address'] as String?;
+                        final senderAddress =
+                            orderData['Sender Address'] as String?;
+                        final pCategory = orderData['category'] as String?;
+                        final pSize = orderData['size'] as String?;
+                        final pweight = orderData['weight'] as String?;
                         final timestamp = orderData['Timestamp'] as Timestamp;
                         final formattedDate = DateFormat('yyyy-MM-dd HH:mm')
                             .format(timestamp.toDate());
@@ -152,12 +165,22 @@ class _HomePageState extends State<HomePage> {
                           child: Card(
                             child: GestureDetector(
                               onTap: () {
-                                // Navigator.push(
-                                //   context,
-                                //   MaterialPageRoute(
-                                //     builder: (context) => OrderClick(),
-                                //   ),
-                                // );
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => OrderClickT(
+                                      senderName: senderName,
+                                      receiverName: receiverName,
+                                      senderAddress: senderAddress,
+                                      receiverAddress: receiverAddress,
+                                      pCategory: pCategory,
+                                      pSize: pSize,
+                                      pweight: pweight,
+                                    ),
+                                  ),
+                                );
+                                // Add your onPressed or onTap logic here
+                                //navigate wala code
                               },
                               child: ListTile(
                                 leading: Image.asset(
@@ -165,9 +188,9 @@ class _HomePageState extends State<HomePage> {
                                   width: 40,
                                   height: 40,
                                 ),
-                                title: Text(orderId ?? ''),
-                                subtitle: Text(formattedDate ?? ''),
-                                trailing: Text(orderData['Cost'] ?? 'Rs.400'),
+                                title: Text("${receiverAddress}"),
+                                subtitle: Text("${formattedDate}"),
+                                trailing: Text('Rs. ${cost ?? "N/A"}'),
                               ),
                             ),
                           ),

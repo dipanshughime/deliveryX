@@ -577,8 +577,15 @@ class _OTPInputSectionState extends State<OTPInputSection> {
 
   Future<void> verifyOTP() async {
     try {
-      await FirebaseAuth.instance.signInWithCredential(_PhoneNumberInputSectionState.credential);
-      Fluttertoast.showToast(
+      final userCredential = await FirebaseAuth.instance.signInWithCredential(_PhoneNumberInputSectionState.credential);
+      print(_PhoneNumberInputSectionState);
+      
+    final user = userCredential.user;
+      if(user!=null){
+
+        
+
+        Fluttertoast.showToast(
           msg: "Logged In Successfully",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
@@ -587,6 +594,17 @@ class _OTPInputSectionState extends State<OTPInputSection> {
           textColor: Colors.white,
           fontSize: 16.0);
       Navigator.push(context, MaterialPageRoute(builder: (c) => Onboarding()));
+      }
+      else{
+        Fluttertoast.showToast(
+          msg: "Log In Fail",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Color.fromARGB(255, 125, 113, 241),
+          textColor: Colors.white,
+          fontSize: 16.0);
+      }
     } catch (e) {
       print(e);
     }

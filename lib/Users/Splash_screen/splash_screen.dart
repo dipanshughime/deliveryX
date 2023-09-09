@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:deliveryx/Users/Users_screen/Sender/homepage.dart';
+import 'package:deliveryx/Users/Users_screen/SignInWithGoogle.dart';
 import 'package:deliveryx/Users/Users_screen/Traveller/homepage.dart';
 import 'package:deliveryx/Users/Users_screen/home_screens.dart';
 import 'package:deliveryx/Users/Users_screen/login_screen.dart';
@@ -19,6 +20,7 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Future<User?> checkSession() async {
+      FirebaseAuth.instance.signOut();
       return FirebaseAuth.instance.currentUser;
     }
 
@@ -41,8 +43,15 @@ class SplashScreen extends StatelessWidget {
     }
 
     // Delayed navigation based on the session and user role
-    Future.delayed(Duration(seconds: 2), () async {
+    Future.delayed(Duration(seconds: 3), () async {
       final user = await checkSession();
+
+      if (user == null) {
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => LoginScreen()));
+        return;
+      }
+
       if (user != null) {
         final role = await checkUserRole();
         if (role != null) {
