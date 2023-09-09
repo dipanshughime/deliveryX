@@ -5,6 +5,7 @@ import 'package:deliveryx/Users/Users_screen/Traveller/homepage.dart';
 import 'package:deliveryx/Users/Users_screen/home_screens.dart';
 import 'package:deliveryx/Users/Users_screen/login_screen.dart';
 import 'package:deliveryx/Users/Users_screen/login_with_otp.dart';
+import 'package:deliveryx/Users/global_user/global_user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -19,15 +20,36 @@ void main() {
 class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-   
     Future<User?> checkSession() async {
-  
+      // FirebaseAuth.instance.signOut();
       return FirebaseAuth.instance.currentUser;
       
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     Future<String?> checkUserRole() async {
       final user = FirebaseAuth.instance.currentUser;
+      print(user);
       if (user != null) {
         // User is signed in, check their role in your Firebase Firestore users collection.
         // Replace 'your_firestore_collection' with your actual collection name.
@@ -60,24 +82,27 @@ class SplashScreen extends StatelessWidget {
           if (role == '0') {
             // User is a sender, navigate to sender homepage
             Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => Homepage_Sender()));
+              MaterialPageRoute(builder: (context) => Homepage_Sender()),
+            );
           } else if (role == '1') {
             // User is a traveler, navigate to traveler homepage
             Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => HomePage()));
+              MaterialPageRoute(builder: (context) => HomePage()),
+            );
           }
         } else {
           // Role not found, navigate to login page
           Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => LoginScreen()));
+            MaterialPageRoute(builder: (context) => LoginScreen()),
+          );
         }
       } else {
         // User is not signed in, navigate to login page
         Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => LoginScreen()));
+          MaterialPageRoute(builder: (context) => LoginScreen()),
+        );
       }
     });
-
     return Scaffold(
       body: Center(
         child: Column(

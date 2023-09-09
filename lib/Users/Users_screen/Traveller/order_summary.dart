@@ -7,16 +7,30 @@ import '../Sender/order_details.dart';
 
 class OrderClickT extends StatefulWidget {
   // final String orderId; //FIREBASE!!!!
-  final String location;
-  final String date;
+
+  // final String? cost;
+  final String? senderName;
+  final String? receiverName;
+  final String? senderAddress;
+  final String? receiverAddress;
+  final String? pCategory;
+  final String? pweight;
+  final String? pSize;
   final String cost;
 
-  const OrderClickT({
-    // required this.orderId, //FIREBASE!!!!
-    required this.location,
-    required this.date,
-    required this.cost,
-  });
+  const OrderClickT(
+      {
+      // required this.orderId, //FIREBASE!!!!
+
+      // required this.cost,
+      required this.senderName,
+      required this.receiverName,
+      required this.senderAddress,
+      required this.receiverAddress,
+      required this.pCategory,
+      required this.pweight,
+      required this.pSize,
+      required this.cost});
 
   @override
   State<OrderClickT> createState() => _OrderClickTState();
@@ -124,7 +138,7 @@ class _OrderClickTState extends State<OrderClickT> {
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                "2Kg",
+                                "${widget.pweight}",
                                 style: TextStyle(fontSize: 18),
                               ),
                             ),
@@ -157,7 +171,7 @@ class _OrderClickTState extends State<OrderClickT> {
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                "Medium",
+                                "${widget.pSize}",
                                 style: TextStyle(fontSize: 18),
                               ),
                             ),
@@ -192,7 +206,7 @@ class _OrderClickTState extends State<OrderClickT> {
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            "Sender's Address...",
+                            "${widget.senderAddress}",
                             style: TextStyle(fontSize: 18),
                           ),
                         ),
@@ -225,7 +239,7 @@ class _OrderClickTState extends State<OrderClickT> {
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            "${widget.location}",
+                            "${widget.receiverAddress}",
                             style: TextStyle(fontSize: 18),
                           ),
                         ),
@@ -245,11 +259,8 @@ class _OrderClickTState extends State<OrderClickT> {
                                 fontSize: 25, fontWeight: FontWeight.bold)),
                         SizedBox(width: 10),
                         Text(
-                          "Rs. ${widget.cost}",
+                          "${widget.cost}",
                           style: TextStyle(fontSize: 18),
-                        ),
-                        SizedBox(
-                          height: 30,
                         ),
                       ],
                     ),

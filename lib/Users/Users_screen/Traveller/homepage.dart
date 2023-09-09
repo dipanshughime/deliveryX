@@ -1,31 +1,37 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:deliveryx/Users/Users_screen/Sender/order_summary.dart';
+import 'package:deliveryx/Users/Users_screen/Sender/profilepage.dart';
 import 'package:deliveryx/Users/Users_screen/Sender/profilepage.dart';
 import 'package:deliveryx/Users/Users_screen/Traveller/order_summary.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
-// import '../Sender/order_details.dart';
+import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
-  final User? user = FirebaseAuth.instance.currentUser;
-
   @override
   _HomePageState createState() => _HomePageState();
 }
 
-// class Order {
-//   final String location;
-//   final String date;
-//   final int cost;
-
-//   Order({required this.location, required this.date, required this.cost});
-// }
-
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
+
+  Stream<QuerySnapshot>? _stream;
+
+  @override
+  void initState() {
+    super.initState();
+
+    final currentUser = FirebaseAuth.instance.currentUser;
+    _stream = FirebaseFirestore.instance
+        .collectionGroup("orders")
+        .where("Status", isEqualTo: "Active")
+        .orderBy("userid", descending: true)
+        .where("userid", isNotEqualTo: currentUser?.uid)
+        .orderBy("Timestamp", descending: true)
+        .snapshots();
+  }
 
   late String location;
   late String date;
@@ -56,9 +62,6 @@ class _HomePageState extends State<HomePage> {
                               fontWeight: FontWeight.w800,
                               color: Colors.white,
                             )),
-                        // SizedBox(
-                        //   width: 200,
-                        // ),
                         Icon(
                           Icons.filter_alt_rounded,
                           size: 30,
@@ -113,7 +116,7 @@ class _HomePageState extends State<HomePage> {
             //recent packages text
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Text("Traveller Recent packages",
+              child: Text("Recent packages",
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     fontSize: 16,
@@ -125,48 +128,77 @@ class _HomePageState extends State<HomePage> {
             Padding(
               padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
               child: Container(
-                height: MediaQuery.of(context).size.height * 0.59,
-                child:
-                    // StreamBuilder(
-                    //     stream: FirebaseFirestore.instance.collectionGroup("orders").where("Status", isEqualTo: "Active")
+                height: MediaQuery.of(context).size.width * 1.3,
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: _stream,
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return Center(child: CircularProgressIndicator());
+                    }
 
-                    //     builder: (BuildContext: context, snapshot))
-                    ListView.builder(
-                  itemCount: 6,
-                  itemBuilder: (BuildContext context, int index) {
-                    String location = 'Location ${index + 1}';
-                    String date = 'Date ${index + 1}';
-                    final Random random = Random();
-                    final int cost = random.nextInt(601) + 700;
+                    final orders = snapshot.data!.docs;
 
-                    return SingleChildScrollView(
-                      child: Card(
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => OrderClickT(
-                                        location: location,
-                                        date: date,
-                                        cost: cost.toString(),
-                                      )),
-                            );
-                            // Add your onPressed or onTap logic here
-                            //navigate wala code
-                          },
-                          child: ListTile(
-                            leading: Image.asset(
-                              'assets/images/package.png',
-                              width: 40,
-                              height: 40,
+                    if (orders.isEmpty) {
+                      return Center(child: Text("No recent orders"));
+                    }
+
+                    return ListView.builder(
+                      itemCount: orders.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final Random random = new Random();
+                        final int cost = random.nextInt(601) + 701;
+                        final orderData =
+                            orders[index].data() as Map<String, dynamic>;
+                        final senderName = orderData['Sender Name'] as String?;
+                        final receiverName =
+                            orderData['Receiver Name'] as String?;
+                        final receiverAddress =
+                            orderData['Receiver Address'] as String?;
+                        final senderAddress =
+                            orderData['Sender Address'] as String?;
+                        final pCategory = orderData['category'] as String?;
+                        final pSize = orderData['size'] as String?;
+                        final pweight = orderData['weight'] as String?;
+                        final timestamp = orderData['Timestamp'] as Timestamp;
+                        final formattedDate = DateFormat('yyyy-MM-dd HH:mm')
+                            .format(timestamp.toDate());
+
+                        return SingleChildScrollView(
+                          child: Card(
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => OrderClickT(
+                                      senderName: senderName,
+                                      receiverName: receiverName,
+                                      senderAddress: senderAddress,
+                                      receiverAddress: receiverAddress,
+                                      pCategory: pCategory,
+                                      pSize: pSize,
+                                      pweight: pweight,
+                                      cost: cost.toString(),
+                                    ),
+                                  ),
+                                );
+                                // Add your onPressed or onTap logic here
+                                //navigate wala code
+                              },
+                              child: ListTile(
+                                leading: Image.asset(
+                                  'assets/images/package.png',
+                                  width: 40,
+                                  height: 40,
+                                ),
+                                title: Text("${receiverAddress}"),
+                                subtitle: Text("${formattedDate}"),
+                                trailing: Text('Rs. ${cost ?? "N/A"}'),
+                              ),
                             ),
-                            title: Text(location),
-                            subtitle: Text(date),
-                            trailing: Text('Rs.${cost.toStringAsFixed(2)}'),
                           ),
-                        ),
-                      ),
+                        );
+                      },
                     );
                   },
                 ),
@@ -175,14 +207,32 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-
-      //BOTTOM NAV
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (index) {
+          // Handle taps on each tab here
           setState(() {
             _currentIndex = index;
           });
+
+          // Add logic based on the selected tab index
+          if (index == 0) {
+            // Handle Home icon tap
+            // Add your logic for the Home icon here
+          } else if (index == 1) {
+            // Handle Map icon tap
+            // Add your logic for the Map icon here
+          } else if (index == 2) {
+            // Handle Message icon tap
+            // Add your logic for the Message icon here
+          } else if (index == 3) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      Profilepage_Sender()), // Replace 'AnotherPage()' with the page you want to navigate to
+            );
+          }
         },
         items: [
           BottomNavigationBarItem(
@@ -207,19 +257,9 @@ class _HomePageState extends State<HomePage> {
             label: "Message",
           ),
           BottomNavigationBarItem(
-            icon: GestureDetector(
-              onTap: () {
-                // Navigate to the "Profile" page when the icon is tapped
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => Profilepage_Sender(),
-                  ),
-                );
-              },
-              child: Icon(
-                Icons.account_circle_outlined,
-                color: Colors.grey,
-              ),
+            icon: Icon(
+              Icons.account_circle_outlined,
+              color: Colors.grey,
             ),
             label: "Profile",
           ),

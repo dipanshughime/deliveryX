@@ -1,6 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
+  final User? user = FirebaseAuth.instance.currentUser;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,15 +37,45 @@ class HomeScreen extends StatelessWidget {
           Column(
             children: [
               Expanded(
-                child: ListView.builder(
-                  itemCount: 5, // Replace with the actual number of packages
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text('Package #$index'),
-                      subtitle: Text('Date: ${DateTime.now()}'),
-                      trailing:
-                          Text('Delivered'), // Replace with the delivery status
-                    );
+                child: StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection('orders')
+                      .where('userId', isEqualTo: user!.uid)
+                      .snapshots(),
+                  builder: (BuildContext context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Center(
+                        child: Text('Error: ${snapshot.error}'),
+                      );
+                    }
+
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(
+                        child: CupertinoActivityIndicator(),
+                      );
+                    }
+                    if (snapshot == null) {
+                      return Center(
+                        child: Text("Error"),
+                      );
+                    }
+                    if (snapshot != null && snapshot.data != null) {
+                      return ListView.builder(
+                        itemCount: snapshot.data!.docs
+                            .length, // Replace with the actual number of packages
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                            title: Text('Package #$index'),
+                            subtitle: Text('Date: ${DateTime.now()}'),
+                            trailing: Text(
+                                'Delivered'), // Replace with the delivery status
+                          );
+                        },
+                      );
+                    }
+                    // Your list view builder code goes here
+                    // Replace with the code to display orders
+                    return Container();
                   },
                 ),
               ),
