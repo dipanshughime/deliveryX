@@ -14,7 +14,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
 
-   Stream<QuerySnapshot>? _stream;
+  Stream<QuerySnapshot>? _stream;
 
   @override
   void initState() {
@@ -30,12 +30,9 @@ class _HomePageState extends State<HomePage> {
         .snapshots();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -108,7 +105,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
 
-             SizedBox(
+            SizedBox(
               height: 20,
             ),
 
@@ -124,7 +121,7 @@ class _HomePageState extends State<HomePage> {
             ),
 
             //listview
-               Padding(
+            Padding(
               padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
               child: Container(
                 height: 350,
@@ -144,21 +141,23 @@ class _HomePageState extends State<HomePage> {
                     return ListView.builder(
                       itemCount: orders.length,
                       itemBuilder: (BuildContext context, int index) {
-                        final orderData = orders[index].data() as Map<String, dynamic>;
+                        final orderData =
+                            orders[index].data() as Map<String, dynamic>;
                         final orderId = orders[index].id;
                         final timestamp = orderData['Timestamp'] as Timestamp;
-                        final formattedDate = DateFormat('yyyy-MM-dd HH:mm').format(timestamp.toDate());
+                        final formattedDate = DateFormat('yyyy-MM-dd HH:mm')
+                            .format(timestamp.toDate());
 
                         return SingleChildScrollView(
                           child: Card(
                             child: GestureDetector(
                               onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => OrderClick(),
-                                  ),
-                                );
+                                // Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(
+                                //     builder: (context) => OrderClick(),
+                                //   ),
+                                // );
                               },
                               child: ListTile(
                                 leading: Image.asset(
@@ -179,10 +178,6 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-
-
-
-
           ],
         ),
       ),
@@ -229,4 +224,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-

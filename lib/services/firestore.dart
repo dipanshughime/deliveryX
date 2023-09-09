@@ -17,13 +17,10 @@ class PackageData {
   String receiverState = '';
   String receiverPincode = '';
 }
+
 class FirestoreService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final AuthService _authService = AuthService();
-
-
-
-  
 
   Future<void> addUserToFirestore({
     required String userId,
@@ -72,10 +69,8 @@ class FirestoreService {
 
       await _firestore.collection("users").doc(user.uid).update(updatedData);
 
-      DocumentSnapshot userSnapshot = await _firestore
-          .collection("users")
-          .doc(user.uid)
-          .get();
+      DocumentSnapshot userSnapshot =
+          await _firestore.collection("users").doc(user.uid).get();
 
       if (userSnapshot.exists) {
         String email = userSnapshot.get("email");
@@ -109,61 +104,53 @@ class FirestoreService {
   }
 
   Future<void> saveOrder(
-  String senderName,
-  String senderPhone ,
-  String senderAddress ,
-  String senderCity ,
-  String senderState ,
-  String senderPincode ,
-
-  String receiverName ,
-  String receiverPhone ,
-  String receiverAddress ,
-  String receiverCity ,
-  String receiverState ,
-  String receiverPincode ,
+    String senderName,
+    String senderPhone,
+    String senderAddress,
+    String senderCity,
+    String senderState,
+    String senderPincode,
+    String receiverName,
+    String receiverPhone,
+    String receiverAddress,
+    String receiverCity,
+    String receiverState,
+    String receiverPincode,
     String category,
     String weight,
     String size,
     bool acceptedTerms,
   ) async {
     try {
-   
       if (currentUser != null) {
         final userId = currentUser!.uid;
 
+        final data = {
+          'Sender Name': senderName,
+          'Sender Phone': senderPhone,
+          'Sender Address': senderAddress,
+          'Sender City': senderCity,
+          'Sender State': senderState,
+          'Sender Pincode': senderPincode,
+          'Receiver Name': receiverName,
+          'Receiver Phone': receiverPhone,
+          'Receiver Address': receiverAddress,
+          'Receiver City': receiverCity,
+          'Receiver State': receiverState,
+          'Receiver Pincode': receiverPincode,
+          'category': category,
+          'weight': weight,
+          'size': size,
+          'acceptedTerms': acceptedTerms,
+        };
 
-          final data = {
-            'Sender Name' : senderName,
-            'Sender Phone' : senderPhone,
-            'Sender Address': senderAddress,
-            'Sender City' : senderCity,
-            'Sender State': senderState,
-            'Sender Pincode':senderPincode,
+        final packageSubcollectionRef =
+            _firestore.collection('users').doc(userId).collection('orders');
 
-             'Receiver Name' : receiverName,
-            'Receiver Phone' : receiverPhone,
-            'Receiver Address': receiverAddress,
-            'Receiver City' : receiverCity,
-            'Receiver State': receiverState,
-            'Receiver Pincode':receiverPincode,
-
-            'category': category,
-            'weight': weight,
-            'size': size,
-            'acceptedTerms': acceptedTerms,
-          };
-
-          final packageSubcollectionRef = _firestore
-              .collection('users')
-              .doc(userId)
-              .collection('orders');
-
-          await packageSubcollectionRef.add(data);
-        } else {
-          // No orders found for the current user
-        }
-      
+        await packageSubcollectionRef.add(data);
+      } else {
+        // No orders found for the current user
+      }
     } catch (error) {
       print('Error saving order: $error');
       throw error;

@@ -27,32 +27,35 @@ class _Homepage_SenderState extends State<Homepage_Sender> {
           .collection('users')
           .doc(currentUser.uid)
           .collection('orders')
-          .orderBy('Timestamp',descending: true)
+          .orderBy('Timestamp', descending: true)
           .snapshots();
     }
   }
 
   void _signOut() async {
-  try {
-    final currentUser = FirebaseAuth.instance.currentUser;
-    if (currentUser != null) {
-      // Update the user's role to -1 in the user collection
-      await FirebaseFirestore.instance.collection('users').doc(currentUser.uid).update({
-        'role': -1,
-      });
+    try {
+      FirebaseAuth.instance.signOut();
+      final currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser != null) {
+        // Update the user's role to -1 in the user collection
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(currentUser.uid)
+            .update({
+          'role': -1,
+        });
+      }
+
+      // Sign out the user
+      // await FirebaseAuth.instance.signOut();
+
+      // Navigate to the login screen after successful logout
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => LoginScreen()));
+    } catch (e) {
+      print("Error signing out: $e");
     }
-
-    // Sign out the user
-    await FirebaseAuth.instance.signOut();
-
-    // Navigate to the login screen after successful logout
-    Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => LoginScreen()));
-  } catch (e) {
-    print("Error signing out: $e");
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +109,8 @@ class _Homepage_SenderState extends State<Homepage_Sender> {
                           ],
                         ),
                         GestureDetector(
-                          onTap: _signOut, // Call the _signOut function when tapped
+                          onTap:
+                              _signOut, // Call the _signOut function when tapped
                           child: Image(
                             image: AssetImage("assets/images/user.png"),
                             width: 50,
@@ -134,7 +138,7 @@ class _Homepage_SenderState extends State<Homepage_Sender> {
             ),
 
             //listview
-                       Padding(
+            Padding(
               padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
               child: Container(
                 height: 350,
@@ -154,10 +158,22 @@ class _Homepage_SenderState extends State<Homepage_Sender> {
                     return ListView.builder(
                       itemCount: orders.length,
                       itemBuilder: (BuildContext context, int index) {
-                        final orderData = orders[index].data() as Map<String, dynamic>;
+                        final orderData =
+                            orders[index].data() as Map<String, dynamic>;
                         final orderId = orders[index].id;
+                        final senderName = orderData['Sender Name'] as String?;
+                        final receiverName =
+                            orderData['Receiver Name'] as String?;
+                        final receiverAddress =
+                            orderData['Receiver Address'] as String?;
+                        final senderAddress =
+                            orderData['Sender Address'] as String?;
+                        final pCategory = orderData['category'] as String?;
+                        final pSize = orderData['size'] as String?;
+                        final pweight = orderData['weight'] as String?;
                         final timestamp = orderData['Timestamp'] as Timestamp;
-                        final formattedDate = DateFormat('yyyy-MM-dd HH:mm').format(timestamp.toDate());
+                        final formattedDate = DateFormat('yyyy-MM-dd HH:mm')
+                            .format(timestamp.toDate());
 
                         return SingleChildScrollView(
                           child: Card(
@@ -166,7 +182,14 @@ class _Homepage_SenderState extends State<Homepage_Sender> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => OrderClick(),
+                                    builder: (context) => OrderClickS(
+                                        senderName: senderName,
+                                        receiverName: receiverName,
+                                        senderAddress: senderAddress,
+                                        receiverAddress: receiverAddress,
+                                        pCategory: pCategory,
+                                        pSize: pSize,
+                                        pweight: pweight),
                                   ),
                                 );
                               },

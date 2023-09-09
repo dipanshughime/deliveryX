@@ -5,11 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '/util/colors.dart';
 
-
-
-
 class PackageInfo extends StatefulWidget {
-    String senderName;
+  String senderName;
   String senderPhone;
   String senderAddress;
   String senderCity;
@@ -42,26 +39,23 @@ class PackageInfo extends StatefulWidget {
   State<StatefulWidget> createState() {
     return PackageFormState(
       senderName: senderName,
-    senderPhone: senderPhone,
-    senderAddress: senderAddress,
-    senderCity: senderCity,
-    senderState: senderState,
-    senderPincode: senderPincode,
-    receiverName:receiverName,
-    receiverPhone: receiverPhone,
-    receiverAddress:receiverAddress,
-    receiverCity: receiverCity,
-    receiverState: receiverState,
-    receiverPincode: receiverPincode,
-      
-
+      senderPhone: senderPhone,
+      senderAddress: senderAddress,
+      senderCity: senderCity,
+      senderState: senderState,
+      senderPincode: senderPincode,
+      receiverName: receiverName,
+      receiverPhone: receiverPhone,
+      receiverAddress: receiverAddress,
+      receiverCity: receiverCity,
+      receiverState: receiverState,
+      receiverPincode: receiverPincode,
     );
   }
 }
 
 class PackageFormState extends State<PackageInfo> {
-
-   final String senderName;
+  final String senderName;
   final String senderPhone;
   final String senderAddress;
   final String senderCity;
@@ -91,12 +85,6 @@ class PackageFormState extends State<PackageInfo> {
     // Other parameters specific to OrderDetails
   });
 
-
-
-
-
-
-
   bool isInput1Visible = false;
   bool isInput2Visible = false;
   bool isChecked = false;
@@ -107,63 +95,63 @@ class PackageFormState extends State<PackageInfo> {
   var temp = 1;
   var temp2 = 0;
   TextEditingController _textEditingController = TextEditingController();
-  TextEditingController _textEditingController_description = TextEditingController();
+  TextEditingController _textEditingController_description =
+      TextEditingController();
 
-User? currentUser;
+  User? currentUser;
 
-@override
+  @override
   void initState() {
     super.initState();
     currentUser = FirebaseAuth.instance.currentUser;
     print(currentUser);
   }
 
-void addDataToFirestore() async {
-  final firestore = FirebaseFirestore.instance;
-  if (currentUser != null) {
-    final userId = currentUser!.uid; // Current user's ID
+  void addDataToFirestore() async {
+    final firestore = FirebaseFirestore.instance;
+    if (currentUser != null) {
+      final userId = currentUser!.uid; // Current user's ID
 
-    try {
-      final data = {
-        'Sender Name': senderName,
-        'Sender Phone': senderPhone,
-        'Sender Address': senderAddress,
-        'Sender City': senderCity,
-        'Sender State': senderState,
-        'Sender Pincode': senderPincode,
-        'Receiver Name': receiverName,
-        'Receiver Phone': receiverPhone,
-        'Receiver Address': receiverAddress,
-        'Receiver City': receiverCity,
-        'Receiver State':receiverState,
-        'Receiver Pincode': receiverPincode,
-        // Other parameters specific to OrderDetails
-        
-        'Package Value':  _textEditingController.text,
-        'Package Category': _dropdownValue1,
-        'Package Description':_textEditingController_description.text,
-        'Package Weight': _dropdownValue2,
-        'Package Size': _dropdownValue3,
-        'acceptedTerms': isChecked,
-        'userid': userId,
-        'Status': 'Active',
-        'Timestamp': FieldValue.serverTimestamp(),
-        
-      };
+      try {
+        final data = {
+          'Sender Name': senderName,
+          'Sender Phone': senderPhone,
+          'Sender Address': senderAddress,
+          'Sender City': senderCity,
+          'Sender State': senderState,
+          'Sender Pincode': senderPincode,
+          'Receiver Name': receiverName,
+          'Receiver Phone': receiverPhone,
+          'Receiver Address': receiverAddress,
+          'Receiver City': receiverCity,
+          'Receiver State': receiverState,
+          'Receiver Pincode': receiverPincode,
+          // Other parameters specific to OrderDetails
 
-      print(data);
+          'Package Value': _textEditingController.text,
+          'Package Category': _dropdownValue1,
+          'Package Description': _textEditingController_description.text,
+          'Package Weight': _dropdownValue2,
+          'Package Size': _dropdownValue3,
+          'acceptedTerms': isChecked,
+          'userid': userId,
+          'Status': 'Active',
+          'Timestamp': FieldValue.serverTimestamp(),
+        };
 
-      final packageSubcollectionRef = FirebaseFirestore.instance
-          .collection('users')
-          .doc(userId)
-          .collection('orders');
+        print(data);
 
-      await packageSubcollectionRef.add(data);
-    } catch (error) {
-      print('Error adding data to package subcollection: $error');
+        final packageSubcollectionRef = FirebaseFirestore.instance
+            .collection('users')
+            .doc(userId)
+            .collection('orders');
+
+        await packageSubcollectionRef.add(data);
+      } catch (error) {
+        print('Error adding data to package subcollection: $error');
+      }
     }
   }
-}
 
 // void addDataToFirestore() async {
 //   final firestore = FirebaseFirestore.instance;
@@ -182,7 +170,7 @@ void addDataToFirestore() async {
 //   ordersQuery.get().then((querySnapshot) {
 //     print(querySnapshot.docs);
 //     if (querySnapshot.docs.isNotEmpty) {
-      
+
 //       final latestOrderDocument = querySnapshot.docs.first;
 //       final latestOrderId = latestOrderDocument.id;
 //       print(latestOrderId);
@@ -216,16 +204,7 @@ void addDataToFirestore() async {
 //   });
 // }
 
-
-
 // }
-
-
-
-
-
-
- 
 
   void showAlert() {
     if (_textEditingController.text.isNotEmpty) {
@@ -241,7 +220,7 @@ void addDataToFirestore() async {
                 onPressed: () {
                   Navigator.of(context).pop();
                   temp2--;
-                  
+
                   showModalBottomSheet(
                     elevation: 0,
                     isDismissible: false,
@@ -307,13 +286,13 @@ void addDataToFirestore() async {
                                   SizedBox(height: 20),
                                   ElevatedButton(
                                     onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => OrderClick(
+                                      // Navigator.push(
+                                      //   context,
+                                      //   MaterialPageRoute(
+                                      //       builder: (context) => OrderClick(
 
-                                            )),
-                                      );
+                                      //       )),
+                                      // );
                                     },
                                     style: ElevatedButton.styleFrom(
                                         padding: EdgeInsets.all(20),
@@ -493,7 +472,7 @@ void addDataToFirestore() async {
                     Visibility(
                       visible: isInput1Visible,
                       child: TextFormField(
-                        controller: _textEditingController_description,
+                          controller: _textEditingController_description,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please describe your parcel';
@@ -750,15 +729,14 @@ void addDataToFirestore() async {
                                                 SizedBox(height: 20),
                                                 ElevatedButton(
                                                   onPressed: () {
-                                                    Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              OrderClick(
+                                                    // Navigator.push(
+                                                    //   context,
+                                                    //   MaterialPageRoute(
+                                                    //       builder: (context) =>
+                                                    //           OrderClick(
 
-                                                                
-                                                              )),
-                                                    );
+                                                    //           )),
+                                                    // );
                                                     // Your second button action
                                                   },
                                                   style:

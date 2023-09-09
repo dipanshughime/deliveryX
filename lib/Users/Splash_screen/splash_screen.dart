@@ -41,28 +41,35 @@ class SplashScreen extends StatelessWidget {
     }
 
     // Delayed navigation based on the session and user role
-    Future.delayed(Duration(seconds: 5), () async {
+    Future.delayed(Duration(seconds: 2), () async {
       final user = await checkSession();
       if (user != null) {
         final role = await checkUserRole();
         if (role != null) {
           if (role == '0') {
             // User is a sender, navigate to sender homepage
-            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Homepage_Sender()));
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => Homepage_Sender()),
+            );
           } else if (role == '1') {
             // User is a traveler, navigate to traveler homepage
-            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => HomePage()),
+            );
           }
-        } else if(role =="-1") {
+        } else {
           // Role not found, navigate to login page
-          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginScreen()));
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => LoginScreen()),
+          );
         }
       } else {
         // User is not signed in, navigate to login page
-        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginScreen()));
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => LoginScreen()),
+        );
       }
     });
-
     return Scaffold(
       body: Center(
         child: Column(
