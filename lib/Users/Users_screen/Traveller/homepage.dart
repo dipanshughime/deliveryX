@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:deliveryx/Users/Users_screen/Sender/profilepage.dart';
 import 'package:deliveryx/Users/Users_screen/Traveller/order_summary.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -206,9 +207,19 @@ class _HomePageState extends State<HomePage> {
             label: "Message",
           ),
           BottomNavigationBarItem(
-            icon: Icon(
-              Icons.account_circle_outlined,
-              color: Colors.grey,
+            icon: GestureDetector(
+              onTap: () {
+                // Navigate to the "Profile" page when the icon is tapped
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => Profilepage_Sender(),
+                  ),
+                );
+              },
+              child: Icon(
+                Icons.account_circle_outlined,
+                color: Colors.grey,
+              ),
             ),
             label: "Profile",
           ),

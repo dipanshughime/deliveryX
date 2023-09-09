@@ -20,27 +20,18 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController passwordTextEditingController =
       TextEditingController();
   bool passwordVisible = false;
-  
-
 
   void _login() async {
-
     try {
       final user = await _authService.signInWithEmailAndPassword(
         emailTextEditingController.text.trim(),
         passwordTextEditingController.text.trim(),
       );
 
-
-
-      
-
       if (user != null) {
-         
-         
-         
         // await storage.write(key: "token", value: "your_token_here");
-        Navigator.push(context, MaterialPageRoute(builder: (c) => Onboarding()));
+        Navigator.push(
+            context, MaterialPageRoute(builder: (c) => Onboarding()));
       } else {
         // Handle login failure
         _showDialog("Login Failed", "Invalid credentials. Please try again.");
@@ -51,7 +42,6 @@ class _LoginScreenState extends State<LoginScreen> {
       _showDialog("Login Error", "An error occurred while logging in.");
     }
   }
-
 
   void _showDialog(String title, String content) {
     showDialog(
@@ -162,7 +152,8 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (c) => LoginScreenOTP()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (c) => LoginScreenOTP()));
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
@@ -186,7 +177,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 Text("New user? "),
                 TextButton(
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (c) => Profilepage_Sender()));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (c) => RegisterScreen()));
                   },
                   child: Text(
                     'Sign up',
