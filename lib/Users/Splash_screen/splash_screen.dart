@@ -5,6 +5,7 @@ import 'package:deliveryx/Users/Users_screen/Traveller/homepage.dart';
 import 'package:deliveryx/Users/Users_screen/home_screens.dart';
 import 'package:deliveryx/Users/Users_screen/login_screen.dart';
 import 'package:deliveryx/Users/Users_screen/login_with_otp.dart';
+import 'package:deliveryx/Users/global_user/global_user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -21,13 +22,36 @@ class SplashScreen extends StatelessWidget {
   Widget build(BuildContext context) {
    
     Future<User?> checkSession() async {
-  
+      
       return FirebaseAuth.instance.currentUser;
+      
       
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     Future<String?> checkUserRole() async {
       final user = FirebaseAuth.instance.currentUser;
+      print(user);
       if (user != null) {
         // User is signed in, check their role in your Firebase Firestore users collection.
         // Replace 'your_firestore_collection' with your actual collection name.

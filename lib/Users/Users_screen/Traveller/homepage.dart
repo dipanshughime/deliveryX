@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:deliveryx/Users/Users_screen/Sender/profilepage.dart';
 import 'package:deliveryx/Users/Users_screen/Traveller/order_summary.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -25,6 +26,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
+
 
   late String location;
   late String date;
@@ -176,44 +178,63 @@ class _HomePageState extends State<HomePage> {
       ),
 
       //BOTTOM NAV
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home,
-              color: Colors.grey,
-            ),
-            label: "Home",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.location_on_outlined,
-              color: Colors.grey,
-            ),
-            label: "Map",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.message_outlined,
-              color: Colors.grey,
-            ),
-            label: "Message",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.account_circle_outlined,
-              color: Colors.grey,
-            ),
-            label: "Profile",
-          ),
-        ],
+bottomNavigationBar: BottomNavigationBar(
+  currentIndex: _currentIndex,
+  onTap: (index) {
+    // Handle taps on each tab here
+    setState(() {
+      _currentIndex = index;
+    });
+
+    // Add logic based on the selected tab index
+    if (index == 0) {
+      // Handle Home icon tap
+      // Add your logic for the Home icon here
+    } else if (index == 1) {
+      // Handle Map icon tap
+      // Add your logic for the Map icon here
+    } else if (index == 2) {
+      // Handle Message icon tap
+      // Add your logic for the Message icon here
+    } else if (index == 3) {
+       Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Profilepage_Sender()), // Replace 'AnotherPage()' with the page you want to navigate to
+    );
+    }
+  },
+  items: [
+    BottomNavigationBarItem(
+      icon: Icon(
+        Icons.home,
+        color: Colors.grey,
       ),
+      label: "Home",
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(
+        Icons.location_on_outlined,
+        color: Colors.grey,
+      ),
+      label: "Map",
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(
+        Icons.message_outlined,
+        color: Colors.grey,
+      ),
+      label: "Message",
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(
+        Icons.account_circle_outlined,
+        color: Colors.grey,
+      ),
+      label: "Profile",
+    ),
+  ],
+),
+
     );
   }
 }

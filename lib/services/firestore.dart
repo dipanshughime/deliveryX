@@ -40,7 +40,7 @@ class FirestoreService {
         "phone": phone,
         "location": location,
         "sender": false,
-        "traveller": false,
+        "traveler": false,
         "role": -1
       };
 
