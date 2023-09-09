@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:deliveryx/Users/Users_screen/Sender/order_summary.dart';
 import 'package:deliveryx/Users/Users_screen/Sender/profilepage.dart';
+import 'package:deliveryx/Users/Users_screen/Sender/profilepage.dart';
 import 'package:deliveryx/Users/Users_screen/Traveller/order_summary.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -127,7 +128,7 @@ class _HomePageState extends State<HomePage> {
             Padding(
               padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
               child: Container(
-                height: 350,
+                height: MediaQuery.of(context).size.width * 1.3,
                 child: StreamBuilder<QuerySnapshot>(
                   stream: _stream,
                   builder: (context, snapshot) {
@@ -177,6 +178,7 @@ class _HomePageState extends State<HomePage> {
                                       pCategory: pCategory,
                                       pSize: pSize,
                                       pweight: pweight,
+                                      cost: cost.toString(),
                                     ),
                                   ),
                                 );
