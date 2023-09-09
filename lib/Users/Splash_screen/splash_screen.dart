@@ -20,11 +20,9 @@ void main() {
 class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-   
     Future<User?> checkSession() async {
-      
+      // FirebaseAuth.instance.signOut();
       return FirebaseAuth.instance.currentUser;
-      
       
     }
 
@@ -84,24 +82,27 @@ class SplashScreen extends StatelessWidget {
           if (role == '0') {
             // User is a sender, navigate to sender homepage
             Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => Homepage_Sender()));
+              MaterialPageRoute(builder: (context) => Homepage_Sender()),
+            );
           } else if (role == '1') {
             // User is a traveler, navigate to traveler homepage
             Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => HomePage()));
+              MaterialPageRoute(builder: (context) => HomePage()),
+            );
           }
         } else {
           // Role not found, navigate to login page
           Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => LoginScreen()));
+            MaterialPageRoute(builder: (context) => LoginScreen()),
+          );
         }
       } else {
         // User is not signed in, navigate to login page
         Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => LoginScreen()));
+          MaterialPageRoute(builder: (context) => LoginScreen()),
+        );
       }
     });
-
     return Scaffold(
       body: Center(
         child: Column(

@@ -33,7 +33,7 @@ class _Homepage_SenderState extends State<Homepage_Sender> {
           .collection('users')
           .doc(currentUser.uid)
           .collection('orders')
-          .orderBy('Timestamp', descending: true)
+          .orderBy('Timestamp',  descending: true)
           .snapshots();
     }
   }
@@ -62,20 +62,24 @@ class _Homepage_SenderState extends State<Homepage_Sender> {
   }
 
   void _signOut() async {
-    try {
-      final currentUser = FirebaseAuth.instance.currentUser;
-      if (currentUser != null) {
-        // Update the user's role to -1 in the user collection
-        await FirebaseFirestore.instance
+      try {
+      FirebaseAuth.instance.signOut();
+        final currentUser = FirebaseAuth.instance.currentUser;
+        if (currentUser != null) {
+          // Update the user's role to -1 in the user collection
+          await FirebaseFirestore.instance
+            
             .collection('users')
+            
             .doc(currentUser.uid)
+            
             .update({
-          'role': -1,
-        });
-      }
+            'role': -1,
+          });
+        }
 
-      // Sign out the user
-      await FirebaseAuth.instance.signOut();
+        // Sign out the user
+        // await FirebaseAuth.instance.signOut();
 
       // Navigate to the login screen after successful logout
       Navigator.of(context).pushReplacement(
@@ -137,7 +141,8 @@ class _Homepage_SenderState extends State<Homepage_Sender> {
                           ],
                         ),
                         GestureDetector(
-                          onTap: () {
+                          onTap:
+                              () {
                             // Navigate to another page when the image is tapped
                             Navigator.push(
                               context,
@@ -196,6 +201,16 @@ class _Homepage_SenderState extends State<Homepage_Sender> {
                         final orderData =
                             orders[index].data() as Map<String, dynamic>;
                         final orderId = orders[index].id;
+                        final senderName = orderData['Sender Name'] as String?;
+                        final receiverName =
+                            orderData['Receiver Name'] as String?;
+                        final receiverAddress =
+                            orderData['Receiver Address'] as String?;
+                        final senderAddress =
+                            orderData['Sender Address'] as String?;
+                        final pCategory = orderData['category'] as String?;
+                        final pSize = orderData['size'] as String?;
+                        final pweight = orderData['weight'] as String?;
                         final timestamp = orderData['Timestamp'] as Timestamp;
                         final formattedDate = DateFormat('yyyy-MM-dd HH:mm')
                             .format(timestamp.toDate());
@@ -207,7 +222,14 @@ class _Homepage_SenderState extends State<Homepage_Sender> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => OrderClick(),
+                                    builder: (context) => OrderClickS(
+                                        senderName: senderName,
+                                        receiverName: receiverName,
+                                        senderAddress: senderAddress,
+                                        receiverAddress: receiverAddress,
+                                        pCategory: pCategory,
+                                        pSize: pSize,
+                                        pweight: pweight),
                                   ),
                                 );
                               },

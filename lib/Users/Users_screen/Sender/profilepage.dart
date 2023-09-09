@@ -446,49 +446,108 @@ class _Profilepage_SenderState extends State<Profilepage_Sender> {
           ),
         ],
       ),
+  bottomNavigationBar: BottomNavigationBar(
+  currentIndex: _currentIndex,
+  onTap: (index) {
+    // Handle taps on each tab here
+    setState(() {
+      _currentIndex = index;
+    });
 
-      //BOTTOM NAV
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        unselectedItemColor:
-            Colors.black, // Set the unselected icon color to black
-        selectedItemColor: Colors.purple,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home,
-              color: Colors.grey,
-            ),
-            label: "Home",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.location_on_outlined,
-              color: Colors.grey,
-            ),
-            label: "Map",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.message_outlined,
-              color: Colors.grey,
-            ),
-            label: "Message",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.account_circle_outlined,
-              color: Colors.grey,
-            ),
-            label: "Profile",
-          ),
-        ],
+    // Add logic based on the selected tab index
+    if (index == 0) {
+      // Handle Home icon tap
+      // Add your logic for the Home icon here
+    } else if (index == 1) {
+      // Handle Map icon tap
+      // Add your logic for the Map icon here
+    } else if (index == 2) {
+      // Handle Message icon tap
+      // Add your logic for the Message icon here
+    } else if (index == 3) {
+       Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Profilepage_Sender()), // Replace 'AnotherPage()' with the page you want to navigate to
+    );
+    }
+  },
+  items: [
+    BottomNavigationBarItem(
+      icon: Icon(
+        Icons.home,
+        color: Colors.grey,
       ),
+      label: "Home",
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(
+        Icons.location_on_outlined,
+        color: Colors.grey,
+      ),
+      label: "Map",
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(
+        Icons.message_outlined,
+        color: Colors.grey,
+      ),
+      label: "Message",
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(
+        Icons.account_circle_outlined,
+        color: Colors.grey,
+      ),
+      label: "Profile",
+    ),
+  ],
+),
+
     );
   }
 }
+//       //BOTTOM NAV
+//       bottomNavigationBar: BottomNavigationBar(
+//         currentIndex: _currentIndex,
+//         onTap: (index) {
+//           setState(() {
+//             _currentIndex = index;
+//           });
+//         },
+//         unselectedItemColor:
+//             Colors.black, // Set the unselected icon color to black
+//         selectedItemColor: Colors.purple,
+//         items: [
+//           BottomNavigationBarItem(
+//             icon: Icon(
+//               Icons.home,
+//               color: Colors.grey,
+//             ),
+//             label: "Home",
+//           ),
+//           BottomNavigationBarItem(
+//             icon: Icon(
+//               Icons.location_on_outlined,
+//               color: Colors.grey,
+//             ),
+//             label: "Map",
+//           ),
+//           BottomNavigationBarItem(
+//             icon: Icon(
+//               Icons.message_outlined,
+//               color: Colors.grey,
+//             ),
+//             label: "Message",
+//           ),
+//           BottomNavigationBarItem(
+//             icon: Icon(
+//               Icons.account_circle_outlined,
+//               color: Colors.grey,
+//             ),
+//             label: "Profile",
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }

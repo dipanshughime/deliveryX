@@ -7,15 +7,27 @@ import '../Sender/order_details.dart';
 
 class OrderClickT extends StatefulWidget {
   // final String orderId; //FIREBASE!!!!
-  final String location;
-  final String date;
-  final String cost;
+
+  // final String? cost;
+  final String? senderName;
+  final String? receiverName;
+  final String? senderAddress;
+  final String? receiverAddress;
+  final String? pCategory;
+  final String? pweight;
+  final String? pSize;
 
   const OrderClickT({
     // required this.orderId, //FIREBASE!!!!
-    required this.location,
-    required this.date,
-    required this.cost,
+
+    // required this.cost,
+    required this.senderName,
+    required this.receiverName,
+    required this.senderAddress,
+    required this.receiverAddress,
+    required this.pCategory,
+    required this.pweight,
+    required this.pSize,
   });
 
   @override
@@ -61,17 +73,15 @@ class _OrderClickTState extends State<OrderClickT> {
                   ),
                   Row(
                     children: [
-                      Text("Name:", style: TextStyle(fontSize: 18)),
+                      Text("Name: ${widget.senderName}",
+                          style: TextStyle(fontSize: 18)),
                       SizedBox(width: 10),
-                      Text(
-                        "Sender's name",
-                        style: TextStyle(fontSize: 18),
-                      ),
                     ],
                   ),
                   Row(
                     children: [
-                      Text("Address:", style: TextStyle(fontSize: 18)),
+                      Text("Address: ${widget.senderAddress}",
+                          style: TextStyle(fontSize: 18)),
                       SizedBox(width: 10),
                       Text(
                         "Sender's addressss",
@@ -90,7 +100,8 @@ class _OrderClickTState extends State<OrderClickT> {
                           TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
                   Row(
                     children: [
-                      Text("Name:", style: TextStyle(fontSize: 18)),
+                      Text("Name: ${widget.receiverName}",
+                          style: TextStyle(fontSize: 18)),
                       SizedBox(width: 10),
                       Text(
                         "Receiver's name",
@@ -100,7 +111,7 @@ class _OrderClickTState extends State<OrderClickT> {
                   ),
                   Row(
                     children: [
-                      Text("Address: ${widget.location}",
+                      Text("Address: ${widget.receiverAddress}",
                           style: TextStyle(fontSize: 18)),
                     ],
                   ),
@@ -110,12 +121,20 @@ class _OrderClickTState extends State<OrderClickT> {
                   Center(
                     child: Column(
                       children: [
-                        Text("Cost",
+                        Text("Details",
                             style: TextStyle(
                                 fontSize: 25, fontWeight: FontWeight.bold)),
                         SizedBox(width: 10),
                         Text(
-                          "Rs. ${widget.cost}",
+                          "${widget.pCategory}",
+                          style: TextStyle(fontSize: 18),
+                        ),
+                        Text("${widget.pweight}",
+                            style: TextStyle(
+                                fontSize: 25, fontWeight: FontWeight.bold)),
+                        SizedBox(width: 10),
+                        Text(
+                          "${widget.pSize}",
                           style: TextStyle(fontSize: 18),
                         ),
                         SizedBox(
