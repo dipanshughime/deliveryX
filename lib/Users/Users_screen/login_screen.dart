@@ -1,4 +1,5 @@
 import 'dart:ffi';
+import 'package:deliveryx/Users/Users_screen/Sender/profilepage.dart';
 import 'package:flutter/material.dart';
 import '../../services/auth.dart';
 import 'registration.dart';
@@ -185,7 +186,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Text("New user? "),
                 TextButton(
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (c) => RegisterScreen()));
+                    Navigator.push(context, MaterialPageRoute(builder: (c) => Profilepage_Sender()));
                   },
                   child: Text(
                     'Sign up',

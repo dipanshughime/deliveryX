@@ -41,7 +41,7 @@ class SplashScreen extends StatelessWidget {
     }
 
     // Delayed navigation based on the session and user role
-    Future.delayed(Duration(seconds: 5), () async {
+    Future.delayed(Duration(seconds: 3), () async {
       final user = await checkSession();
       if (user != null) {
         final role = await checkUserRole();
