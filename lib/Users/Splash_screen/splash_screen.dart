@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:deliveryx/Users/Users_screen/Sender/homepage.dart';
+import 'package:deliveryx/Users/Users_screen/SignInWithGoogle.dart';
 import 'package:deliveryx/Users/Users_screen/Traveller/homepage.dart';
 import 'package:deliveryx/Users/Users_screen/home_screens.dart';
 import 'package:deliveryx/Users/Users_screen/login_screen.dart';
@@ -18,8 +19,11 @@ void main() {
 class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+   
     Future<User?> checkSession() async {
+  
       return FirebaseAuth.instance.currentUser;
+      
     }
 
     Future<String?> checkUserRole() async {

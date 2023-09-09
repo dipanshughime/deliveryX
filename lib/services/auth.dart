@@ -36,6 +36,9 @@ class AuthService {
         password: password.trim(),
       );
 
+      final emailPasswordCredential = EmailAuthProvider.credential(email: email, password: password);
+      
+
    
 
       
@@ -45,6 +48,10 @@ class AuthService {
       return null;
     }
   }
+
+
+
+
 
   
 
