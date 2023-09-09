@@ -1,41 +1,38 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:deliveryx/Users/Users_screen/Sender/order_summary.dart';
+import 'package:deliveryx/Users/Users_screen/Traveller/order_summary.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+
+// import '../Sender/order_details.dart';
 
 class HomePage extends StatefulWidget {
+  final User? user = FirebaseAuth.instance.currentUser;
+
   @override
   _HomePageState createState() => _HomePageState();
 }
 
+// class Order {
+//   final String location;
+//   final String date;
+//   final int cost;
+
+//   Order({required this.location, required this.date, required this.cost});
+// }
+
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
 
-   Stream<QuerySnapshot>? _stream;
-
-  @override
-  void initState() {
-    super.initState();
-
-    final currentUser = FirebaseAuth.instance.currentUser;
-    _stream = FirebaseFirestore.instance
-        .collectionGroup("orders")
-        .where("Status", isEqualTo: "Active")
-        .orderBy("userid", descending: true)
-        .where("userid", isNotEqualTo: currentUser?.uid)
-        .orderBy("Timestamp", descending: true)
-        .snapshots();
-  }
-
-
+  late String location;
+  late String date;
+  late String cost;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -108,14 +105,14 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
 
-             SizedBox(
+            SizedBox(
               height: 20,
             ),
 
             //recent packages text
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Text("Recent packages",
+              child: Text("Traveller Recent packages",
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     fontSize: 16,
@@ -124,65 +121,56 @@ class _HomePageState extends State<HomePage> {
             ),
 
             //listview
-               Padding(
+            Padding(
               padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
               child: Container(
-                height: 350,
-                child: StreamBuilder<QuerySnapshot>(
-                  stream: _stream,
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return Center(child: CircularProgressIndicator());
-                    }
+                height: MediaQuery.of(context).size.height * 0.59,
+                child:
+                    // StreamBuilder(
+                    //     stream: FirebaseFirestore.instance.collectionGroup("orders").where("Status", isEqualTo: "Active")
 
-                    final orders = snapshot.data!.docs;
+                    //     builder: (BuildContext: context, snapshot))
+                    ListView.builder(
+                  itemCount: 6,
+                  itemBuilder: (BuildContext context, int index) {
+                    String location = 'Location ${index + 1}';
+                    String date = 'Date ${index + 1}';
+                    final Random random = Random();
+                    final int cost = random.nextInt(601) + 700;
 
-                    if (orders.isEmpty) {
-                      return Center(child: Text("No recent orders"));
-                    }
-
-                    return ListView.builder(
-                      itemCount: orders.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        final orderData = orders[index].data() as Map<String, dynamic>;
-                        final orderId = orders[index].id;
-                        final timestamp = orderData['Timestamp'] as Timestamp;
-                        final formattedDate = DateFormat('yyyy-MM-dd HH:mm').format(timestamp.toDate());
-
-                        return SingleChildScrollView(
-                          child: Card(
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => OrderClick(),
-                                  ),
-                                );
-                              },
-                              child: ListTile(
-                                leading: Image.asset(
-                                  'assets/images/package.png',
-                                  width: 40,
-                                  height: 40,
-                                ),
-                                title: Text(orderId ?? ''),
-                                subtitle: Text(formattedDate ?? ''),
-                                trailing: Text(orderData['Cost'] ?? 'Rs.400'),
-                              ),
+                    return SingleChildScrollView(
+                      child: Card(
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => OrderClickT(
+                                        location: location,
+                                        date: date,
+                                        cost: cost.toString(),
+                                      )),
+                            );
+                            // Add your onPressed or onTap logic here
+                            //navigate wala code
+                          },
+                          child: ListTile(
+                            leading: Image.asset(
+                              'assets/images/package.png',
+                              width: 40,
+                              height: 40,
                             ),
+                            title: Text(location),
+                            subtitle: Text(date),
+                            trailing: Text('Rs.${cost.toStringAsFixed(2)}'),
                           ),
-                        );
-                      },
+                        ),
+                      ),
                     );
                   },
                 ),
               ),
             ),
-
-
-
-
           ],
         ),
       ),
@@ -229,4 +217,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
