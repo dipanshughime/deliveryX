@@ -57,251 +57,255 @@ class _OrderClickTState extends State<OrderClickT> {
         title: Text("Order Summary"),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Container(
-          width: double.infinity,
-          child: Card(
-            color: Colors.white,
-            elevation: 8.0,
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.start,
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          //mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            //CHILD-1 Category and Item Name
+            Text("Category",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+
+            SizedBox(
+              height: 10,
+            ),
+
+            // Category Details
+            Container(
+              padding: EdgeInsets.all(16.0),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: Color.fromARGB(255, 194, 194, 194),
+                    width: 1,
+                  )),
+              child: Row(
                 children: [
-                  //CHILD-1 Category and Item Name
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Catergory:",
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold)),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.85,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                              color: Color.fromARGB(255, 194, 194, 194),
-                              width: 1,
-                            )),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            children: [
-                              Image.asset(
-                                'assets/images/package.png',
-                                width: 30,
-                                height: 30,
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                "Item Name",
-                                style: TextStyle(fontSize: 18),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
+                  Image.asset(
+                    'assets/images/box.png',
+                    width: 20,
+                    height: 20,
                   ),
-                  SizedBox(
-                    height: 10,
-                  ),
-
-                  //CHILD-2 (2 COLUMNs INSIDE ROW)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      //COLUMN 1 weight
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Weight:",
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold)),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            width: MediaQuery.of(context).size.width * 0.25,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
-                                  color: Color.fromARGB(255, 194, 194, 194),
-                                  width: 1,
-                                )),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                "${widget.pweight}",
-                                style: TextStyle(fontSize: 18),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      SizedBox(
-                        width: 20,
-                      ),
-
-                      //COLUMN 2 size
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Dimension:",
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold)),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            width: MediaQuery.of(context).size.width * 0.5,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
-                                  color: Color.fromARGB(255, 194, 194, 194),
-                                  width: 1,
-                                )),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                "${widget.pSize}",
-                                style: TextStyle(fontSize: 18),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-
-                  //CHILD-3 pickup location (sender's address)
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Pickup Location: ",
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold)),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.85,
-                        height: MediaQuery.of(context).size.height * 0.15,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                              color: Color.fromARGB(255, 194, 194, 194),
-                              width: 1,
-                            )),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            "${widget.senderAddress}",
-                            style: TextStyle(fontSize: 18),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-
-                  //CHILD-4 Drop Location (receiver's address)
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Drop Location: ",
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold)),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.85,
-                        height: MediaQuery.of(context).size.height * 0.15,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                              color: Color.fromARGB(255, 194, 194, 194),
-                              width: 1,
-                            )),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            "${widget.receiverAddress}",
-                            style: TextStyle(fontSize: 18),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-
-                  //COST
-                  Center(
-                    child: Column(
-                      children: [
-                        Text("Cost",
-                            style: TextStyle(
-                                fontSize: 25, fontWeight: FontWeight.bold)),
-                        SizedBox(width: 10),
-                        Text(
-                          "${widget.cost}",
-                          style: TextStyle(fontSize: 18),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  //button
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => OrderDetails()),
-                          );
-                        },
-                        child: Text(
-                          'Deliver',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                          ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          primary: Color(0xFFA084E8), // Button color
-                          onPrimary: Colors.black, // Text color
-                          padding: EdgeInsets.all(20),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                          ),
-                          minimumSize: Size(double.infinity, 0), // Full width
-                        ),
-                      ),
-                    ),
-                  ),
+                  SizedBox(width: 16),
+                  Text("${widget.pweight}", style: TextStyle(fontSize: 16)),
                 ],
               ),
             ),
-          ),
+            SizedBox(
+              height: 16,
+            ),
+
+            //CHILD-2 (2 COLUMNs INSIDE ROW)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                //COLUMN 1 weight
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Weight",
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold)),
+                      SizedBox(
+                        height: 10,
+                      ),
+
+                      // Weight Details
+                      Container(
+                        padding: EdgeInsets.all(16.0),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: Color.fromARGB(255, 194, 194, 194),
+                              width: 1,
+                            )),
+                        child: Row(
+                          children: [
+                            Text("${widget.pweight}",
+                                style: TextStyle(fontSize: 16)),
+                            SizedBox(width: 70),
+                            Container(
+                              height: 16,
+                              width: 1,
+                              color: Colors.grey,
+                            ),
+                            SizedBox(width: 8),
+                            Text('kg', style: TextStyle(fontSize: 16)),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                SizedBox(
+                  width: 30,
+                ),
+
+                //COLUMN 2 size
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Dimension:",
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold)),
+                      SizedBox(
+                        height: 10,
+                      ),
+
+                      // dimension Details
+                      Container(
+                        padding: EdgeInsets.all(16.0),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: Color.fromARGB(255, 194, 194, 194),
+                              width: 1,
+                            )),
+                        child: Row(
+                          children: [
+                            Text("${widget.pSize}",
+                                style: TextStyle(fontSize: 16)),
+                            SizedBox(width: 70),
+                            Container(
+                              height: 16,
+                              width: 1,
+                              color: Colors.grey,
+                            ),
+                            SizedBox(width: 8),
+                            Text('kg', style: TextStyle(fontSize: 16)),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 16,
+            ),
+
+            //CHILD-3 pickup location (sender's address)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Pickup Location",
+                    style:
+                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  width: double.infinity,
+                  height: MediaQuery.of(context).size.height * 0.15,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: Color.fromARGB(255, 194, 194, 194),
+                        width: 1,
+                      )),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "${widget.senderAddress}",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 16,
+            ),
+
+            //CHILD-4 Drop Location (receiver's address)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Drop Location",
+                    style:
+                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  width: double.infinity,
+                  height: MediaQuery.of(context).size.height * 0.15,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: Color.fromARGB(255, 194, 194, 194),
+                        width: 1,
+                      )),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "${widget.receiverAddress}",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 16,
+            ),
+
+            //COST
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Cost -",
+                    style:
+                        TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
+                SizedBox(width: 10),
+                Text(
+                  "Rs",
+                  style: TextStyle(fontSize: 18),
+                ),
+                SizedBox(width: 5),
+                Text(
+                  "${widget.cost}",
+                  style: TextStyle(fontSize: 18),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 16,
+            ),
+
+            //button
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => OrderDetails()),
+                  );
+                },
+                child: Text(
+                  'Deliver',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                  ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  primary: Color(0xFFA084E8), // Button color
+                  onPrimary: Colors.black, // Text color
+                  padding: EdgeInsets.all(20),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
+                  minimumSize: Size(double.infinity, 0), // Full width
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
