@@ -147,7 +147,7 @@ class _LoginScreenState extends State<LoginScreenOTP> {
                       ElevatedButton.icon(
                         onPressed: () {
                           // Perform sign up with Google logic
-                              Navigator.push(
+                          Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => LoginScreen()),
@@ -493,16 +493,15 @@ class _PhoneNumberInputSectionState extends State<PhoneNumberInputSection> {
         //       fontSize: 18,
         //     ),
         //   ),
-          // style: ElevatedButton.styleFrom(
-          //   primary: Color(0xFFA084E8), // Button color
-          //   onPrimary: Colors.black, // Text color
-          //   padding: EdgeInsets.all(20),
-          //   shape: RoundedRectangleBorder(
-          //     borderRadius: BorderRadius.circular(30.0),
-          //   ),
-          //   minimumSize: Size(double.infinity, 0), // Full width
-          // ),
-        
+        // style: ElevatedButton.styleFrom(
+        //   primary: Color(0xFFA084E8), // Button color
+        //   onPrimary: Colors.black, // Text color
+        //   padding: EdgeInsets.all(20),
+        //   shape: RoundedRectangleBorder(
+        //     borderRadius: BorderRadius.circular(30.0),
+        //   ),
+        //   minimumSize: Size(double.infinity, 0), // Full width
+        // ),
       ],
     );
   }
@@ -577,33 +576,31 @@ class _OTPInputSectionState extends State<OTPInputSection> {
 
   Future<void> verifyOTP() async {
     try {
-      final userCredential = await FirebaseAuth.instance.signInWithCredential(_PhoneNumberInputSectionState.credential);
+      final userCredential = await FirebaseAuth.instance
+          .signInWithCredential(_PhoneNumberInputSectionState.credential);
       print(_PhoneNumberInputSectionState);
-      
-    final user = userCredential.user;
-      if(user!=null){
 
-        
-
+      final user = userCredential.user;
+      if (user != null) {
         Fluttertoast.showToast(
-          msg: "Logged In Successfully",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Color.fromARGB(255, 125, 113, 241),
-          textColor: Colors.white,
-          fontSize: 16.0);
-      Navigator.push(context, MaterialPageRoute(builder: (c) => Onboarding()));
-      }
-      else{
+            msg: "Logged In Successfully",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Color.fromARGB(255, 125, 113, 241),
+            textColor: Colors.white,
+            fontSize: 16.0);
+        Navigator.push(
+            context, MaterialPageRoute(builder: (c) => Onboarding()));
+      } else {
         Fluttertoast.showToast(
-          msg: "Log In Fail",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Color.fromARGB(255, 125, 113, 241),
-          textColor: Colors.white,
-          fontSize: 16.0);
+            msg: "Log In Fail",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Color.fromARGB(255, 125, 113, 241),
+            textColor: Colors.white,
+            fontSize: 16.0);
       }
     } catch (e) {
       print(e);
@@ -616,7 +613,7 @@ class _OTPInputSectionState extends State<OTPInputSection> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // buildTextField('OTP', Icons.lock, 'Enter the OTP received'),
-          SizedBox(height: 20),
+        SizedBox(height: 20),
         TextField(
           controller: _otpController,
           keyboardType: TextInputType.number, // Corrected input type
@@ -629,7 +626,8 @@ class _OTPInputSectionState extends State<OTPInputSection> {
             ),
           ),
           onChanged: (value) {
-            _PhoneNumberInputSectionState.credential = PhoneAuthProvider.credential(
+            _PhoneNumberInputSectionState.credential =
+                PhoneAuthProvider.credential(
               verificationId: _PhoneNumberInputSectionState.verificationId,
               smsCode: value,
             );
@@ -638,7 +636,6 @@ class _OTPInputSectionState extends State<OTPInputSection> {
         SizedBox(height: 32),
         ElevatedButton(
           onPressed: () {
-
             verifyOTP();
           },
           child: Text(
@@ -712,7 +709,7 @@ class _OTPInputSectionState extends State<OTPInputSection> {
   //             borderSide: BorderSide(color: Color.fromARGB(255, 203, 195, 195)),
   //             borderRadius: BorderRadius.circular(8),
   //           ),
-         
+
   //           focusedBorder: OutlineInputBorder(
   //             borderSide: BorderSide(color: Color(0xFFA084E8)),
   //             borderRadius: BorderRadius.circular(15),

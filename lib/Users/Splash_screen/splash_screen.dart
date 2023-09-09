@@ -23,29 +23,7 @@ class SplashScreen extends StatelessWidget {
     Future<User?> checkSession() async {
       // FirebaseAuth.instance.signOut();
       return FirebaseAuth.instance.currentUser;
-      
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     Future<String?> checkUserRole() async {
       final user = FirebaseAuth.instance.currentUser;
@@ -124,10 +102,6 @@ class SplashScreen extends StatelessWidget {
   }
 }
 
-
-
-
-
 // import 'package:deliveryx/Users/Users_screen/Sender/homepage.dart';
 // import 'package:deliveryx/Users/Users_screen/home_screens.dart';
 // import 'package:deliveryx/Users/Users_screen/login_with_otp.dart';
@@ -136,7 +110,6 @@ class SplashScreen extends StatelessWidget {
 // import 'package:flutter_spinkit/flutter_spinkit.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 
-
 // void main() {
 //   runApp(MaterialApp(
 //     debugShowCheckedModeBanner: false,
@@ -144,10 +117,8 @@ class SplashScreen extends StatelessWidget {
 //   ));
 // }
 
-
-
 // class SplashScreen extends StatelessWidget {
-  
+
 //   @override
 //   Widget build(BuildContext context) {
 //     Future<bool> checkSession() async {
@@ -155,7 +126,6 @@ class SplashScreen extends StatelessWidget {
 //   return user != null;
 // }
 
-    
 //    // Delayed navigation based on the session
 //     Future.delayed(Duration(seconds: 5), () async {
 //       bool isLoggedIn = await checkSession();
@@ -188,20 +158,3 @@ class SplashScreen extends StatelessWidget {
 //     );
 //   }
 // }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

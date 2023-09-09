@@ -3,8 +3,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../services/auth.dart';
 import 'Onboarding.dart';
 
-
-
 class SignInWithGoogle extends StatefulWidget {
   const SignInWithGoogle({super.key});
 
@@ -12,36 +10,25 @@ class SignInWithGoogle extends StatefulWidget {
   State<SignInWithGoogle> createState() => _SignInWithGoogleState();
 }
 
-
-
 class _SignInWithGoogleState extends State<SignInWithGoogle> {
-    final AuthService _authService = AuthService();
+  final AuthService _authService = AuthService();
   final TextEditingController emailTextEditingController =
       TextEditingController();
   final TextEditingController passwordTextEditingController =
       TextEditingController();
   bool passwordVisible = false;
-  
-
 
   void _login() async {
-
     try {
       final user = await _authService.signInWithEmailAndPassword(
         emailTextEditingController.text.trim(),
         passwordTextEditingController.text.trim(),
       );
 
-
-
-      
-
       if (user != null) {
-         
-         
-         
         // await storage.write(key: "token", value: "your_token_here");
-        Navigator.push(context, MaterialPageRoute(builder: (c) => Onboarding()));
+        Navigator.push(
+            context, MaterialPageRoute(builder: (c) => Onboarding()));
       } else {
         // Handle login failure
         _showDialog("Login Failed", "Invalid credentials. Please try again.");
@@ -53,7 +40,7 @@ class _SignInWithGoogleState extends State<SignInWithGoogle> {
     }
   }
 
-   void _showDialog(String title, String content) {
+  void _showDialog(String title, String content) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -117,7 +104,6 @@ class _SignInWithGoogleState extends State<SignInWithGoogle> {
                 ),
                 SizedBox(height: 8),
                 Text(
-
                   'Get great experience with DeliveryX :)',
                   style: TextStyle(
                     fontSize: 15,
@@ -125,8 +111,7 @@ class _SignInWithGoogleState extends State<SignInWithGoogle> {
                 ),
                 SizedBox(height: 35),
                 buildTextField('Email', Icons.email, 'Enter your email',
-                emailTextEditingController,
-                    validator: (value) {
+                    emailTextEditingController, validator: (value) {
                   if (value!.isEmpty) {
                     return 'Please enter your email';
                   }
@@ -140,7 +125,6 @@ class _SignInWithGoogleState extends State<SignInWithGoogle> {
                 }),
                 SizedBox(height: 16),
                 buildTextField(
-                  
                   'Password',
                   Icons.lock,
                   'Enter your password',
@@ -186,7 +170,6 @@ class _SignInWithGoogleState extends State<SignInWithGoogle> {
                   ),
                 ),
                 SizedBox(height: 16),
-
               ],
             ),
           ),
@@ -196,7 +179,7 @@ class _SignInWithGoogleState extends State<SignInWithGoogle> {
   }
 
   Widget buildTextField(String label, IconData icon, String hint,
-  TextEditingController controller,
+      TextEditingController controller,
       {bool isPassword = false,
       TextInputType? keyboardType,
       FormFieldValidator<String>? validator}) {

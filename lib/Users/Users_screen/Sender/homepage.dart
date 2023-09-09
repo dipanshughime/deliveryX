@@ -17,9 +17,7 @@ class Homepage_Sender extends StatefulWidget {
 class _Homepage_SenderState extends State<Homepage_Sender> {
   int _currentIndex = 0;
 
-  
   String location = ""; // State variable for name
- 
 
   Stream<QuerySnapshot>? _ordersStream;
 
@@ -33,7 +31,7 @@ class _Homepage_SenderState extends State<Homepage_Sender> {
           .collection('users')
           .doc(currentUser.uid)
           .collection('orders')
-          .orderBy('Timestamp',  descending: true)
+          .orderBy('Timestamp', descending: true)
           .snapshots();
     }
   }
@@ -50,10 +48,9 @@ class _Homepage_SenderState extends State<Homepage_Sender> {
 
         if (userData.exists) {
           setState(() {
-            location = userData.get("location"); // Assuming 'name' is the field name for name in Firestore
-           
+            location = userData.get(
+                "location"); // Assuming 'name' is the field name for name in Firestore
           });
-        
         }
       }
     } catch (e) {
@@ -62,24 +59,21 @@ class _Homepage_SenderState extends State<Homepage_Sender> {
   }
 
   void _signOut() async {
-      try {
+    try {
       FirebaseAuth.instance.signOut();
-        final currentUser = FirebaseAuth.instance.currentUser;
-        if (currentUser != null) {
-          // Update the user's role to -1 in the user collection
-          await FirebaseFirestore.instance
-            
+      final currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser != null) {
+        // Update the user's role to -1 in the user collection
+        await FirebaseFirestore.instance
             .collection('users')
-            
             .doc(currentUser.uid)
-            
             .update({
-            'role': -1,
-          });
-        }
+          'role': -1,
+        });
+      }
 
-        // Sign out the user
-        // await FirebaseAuth.instance.signOut();
+      // Sign out the user
+      // await FirebaseAuth.instance.signOut();
 
       // Navigate to the login screen after successful logout
       Navigator.of(context).pushReplacement(
@@ -141,8 +135,7 @@ class _Homepage_SenderState extends State<Homepage_Sender> {
                           ],
                         ),
                         GestureDetector(
-                          onTap:
-                              () {
+                          onTap: () {
                             // Navigate to another page when the image is tapped
                             Navigator.push(
                               context,

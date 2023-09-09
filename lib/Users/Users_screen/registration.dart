@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-
 import '../../services/auth.dart';
 import '../../services/firestore.dart';
 import 'login_screen.dart';
 import 'login_with_otp.dart';
- // Import the auth.dart file with Firebase-related functions
+// Import the auth.dart file with Firebase-related functions
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -55,11 +54,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
             location: selectedCity!,
           );
 
-        await Fluttertoast.showToast(msg: "Successfully Registered");
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (c) => LoginScreen()),
-        );
+          await Fluttertoast.showToast(msg: "Successfully Registered");
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (c) => LoginScreen()),
+          );
         }
       } catch (error) {
         Fluttertoast.showToast(msg: "Error occurred:\n$error");
@@ -306,7 +305,3 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 }
-
-
-
-
