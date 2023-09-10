@@ -21,8 +21,8 @@ import 'package:http/http.dart' as http;
 // }
 
 Future<String?> verifyAadhar(String? aadharNumber) async {
-String apiKey = "7ace2ee9-59cb-4244-b1dd-fb2fef0af175";
-String accountId = "8d1eb1c40dcb/4bc33de8-78e0-473a-9c63-024c84562e75";
+String apiKey = "xxx";
+String accountId = "xxx";
 
 
   print(apiKey);
@@ -75,8 +75,8 @@ String accountId = "8d1eb1c40dcb/4bc33de8-78e0-473a-9c63-024c84562e75";
 
 Future<String?> getVerificationResult(String? request_id) async {
   final headers = {
-    'api-key': '7ace2ee9-59cb-4244-b1dd-fb2fef0af175',
-    'account-id': '8d1eb1c40dcb/4bc33de8-78e0-473a-9c63-024c84562e75',
+    'api-key': 'xxx',
+    'account-id': 'xxx',
   };
 
   String? verificationResult;
@@ -120,8 +120,8 @@ Future<String?> getVerificationResult(String? request_id) async {
 
 
 Future<String?> verifyPan(String? panNumber) async {
-String apiKey = "7ace2ee9-59cb-4244-b1dd-fb2fef0af175";
-String accountId = "8d1eb1c40dcb/4bc33de8-78e0-473a-9c63-024c84562e75";
+String apiKey = "xxx";
+String accountId = "xxx";
 
 
   print(apiKey);
@@ -175,8 +175,8 @@ String accountId = "8d1eb1c40dcb/4bc33de8-78e0-473a-9c63-024c84562e75";
 
 Future<String?> getVerificationResultPan(String request_id) async {
   final headers = {
-    'api-key': '7ace2ee9-59cb-4244-b1dd-fb2fef0af175',
-    'account-id': '8d1eb1c40dcb/4bc33de8-78e0-473a-9c63-024c84562e75',
+    'api-key': 'xxx',
+    'account-id': 'xxx',
   };
 
   String? verificationResult;
