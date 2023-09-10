@@ -186,7 +186,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Text("New user? "),
                 TextButton(
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (c) => Profilepage_Sender()));
+                    Navigator.push(context, MaterialPageRoute(builder: (c) => RegisterScreen()));
                   },
                   child: Text(
                     'Sign up',

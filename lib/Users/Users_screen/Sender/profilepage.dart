@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:deliveryx/Users/Users_screen/Sender/homepage.dart';
 import 'package:deliveryx/Users/Users_screen/Traveller/homepage.dart';
+import 'package:deliveryx/Users/Users_screen/Traveller/kyc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -100,7 +101,7 @@ class _Profilepage_SenderState extends State<Profilepage_Sender> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => HomePage(),
+              builder: (context) => KYCScreen(),
             ),
           );
         } else if (role == 0 && traveler) {

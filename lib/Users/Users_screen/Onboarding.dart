@@ -184,6 +184,8 @@ class _OnboardingState extends State<Onboarding> {
                     if (user != null) {
                       await _firestoreService.updateUserAsTraveler(user);
 
+                      
+
                       Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(builder: (builder) => HomePage()),
