@@ -157,47 +157,36 @@ class FirestoreService {
     }
   }
 }
-  
 
+// Future<void> saveOrder(PackageData packageData) async {
 
+// if (currentUser == null) {
+//   // Handle the case where the user is not logged in
+//   return;
+// }
 
-  // Future<void> saveOrder(PackageData packageData) async {
-      
-  // if (currentUser == null) {
-  //   // Handle the case where the user is not logged in
-  //   return;
-  // }
+// final senderId = currentUser!.uid;
+// final ordersCollection = FirebaseFirestore.instance
+//     .collection('users')
+//     .doc(senderId)
+//     .collection('orders');
 
-  // final senderId = currentUser!.uid;
-  // final ordersCollection = FirebaseFirestore.instance
-  //     .collection('users')
-  //     .doc(senderId)
-  //     .collection('orders');
+// await ordersCollection.add({
+//   "userid": senderId,
+//   'Sender Name': packageData.senderName,
+//   'Sender Phone': packageData.senderPhone,
+//   'Sender Address': packageData.senderAddress,
+//   'Sender City': packageData.senderCity,
+//   'Sender State': packageData.senderState,
+//   'Sender Pincode': packageData.senderPincode,
+//   'Receiver Name': packageData.receiverName,
+//   'Receiver Phone': packageData.receiverPhone,
+//   'Receiver Address': packageData.receiverAddress,
+//   'Receiver City': packageData.receiverCity,
+//   'Receiver State': packageData.receiverState,
+//   'Receiver Pincode': packageData.receiverPincode,
+//   'Status': 'Active',
+//   'Time Stamp': FieldValue.serverTimestamp(),
+// });
 
-  // await ordersCollection.add({
-  //   "userid": senderId,
-  //   'Sender Name': packageData.senderName,
-  //   'Sender Phone': packageData.senderPhone,
-  //   'Sender Address': packageData.senderAddress,
-  //   'Sender City': packageData.senderCity,
-  //   'Sender State': packageData.senderState,
-  //   'Sender Pincode': packageData.senderPincode,
-  //   'Receiver Name': packageData.receiverName,
-  //   'Receiver Phone': packageData.receiverPhone,
-  //   'Receiver Address': packageData.receiverAddress,
-  //   'Receiver City': packageData.receiverCity,
-  //   'Receiver State': packageData.receiverState,
-  //   'Receiver Pincode': packageData.receiverPincode,
-  //   'Status': 'Active',
-  //   'Time Stamp': FieldValue.serverTimestamp(),
-  // });
-
-
-
-
-
-  
-
-
-
-  // Add other Firestore-related methods here
+// Add other Firestore-related methods here

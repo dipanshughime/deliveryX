@@ -66,7 +66,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '547006099680',
     projectId: 'delapp-47503',
     storageBucket: 'delapp-47503.appspot.com',
-    iosClientId: '547006099680-ebvev3orvqucsm4e5eue828co9fg56ft.apps.googleusercontent.com',
+    iosClientId:
+        '547006099680-ebvev3orvqucsm4e5eue828co9fg56ft.apps.googleusercontent.com',
     iosBundleId: 'com.example.deliveryx',
   );
 
@@ -76,7 +77,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '547006099680',
     projectId: 'delapp-47503',
     storageBucket: 'delapp-47503.appspot.com',
-    iosClientId: '547006099680-rpeod7tj7v7rvkscf5t3rg6odlvkls97.apps.googleusercontent.com',
+    iosClientId:
+        '547006099680-rpeod7tj7v7rvkscf5t3rg6odlvkls97.apps.googleusercontent.com',
     iosBundleId: 'com.example.deliveryx.RunnerTests',
   );
 }

@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:deliveryx/Users/Users_screen/Sender/order_summary.dart';
 import 'package:deliveryx/Users/Users_screen/Sender/profilepage.dart';
+import 'package:deliveryx/Users/Users_screen/Sender/profilepage.dart';
 import 'package:deliveryx/Users/Users_screen/Traveller/order_summary.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -127,7 +128,7 @@ class _HomePageState extends State<HomePage> {
             Padding(
               padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
               child: Container(
-                height: 350,
+                height: MediaQuery.of(context).size.width * 1.3,
                 child: StreamBuilder<QuerySnapshot>(
                   stream: _stream,
                   builder: (context, snapshot) {
@@ -177,6 +178,7 @@ class _HomePageState extends State<HomePage> {
                                       pCategory: pCategory,
                                       pSize: pSize,
                                       pweight: pweight,
+                                      cost: cost.toString(),
                                     ),
                                   ),
                                 );
@@ -205,64 +207,64 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: (index) {
+          // Handle taps on each tab here
+          setState(() {
+            _currentIndex = index;
+          });
 
-  bottomNavigationBar: BottomNavigationBar(
-  currentIndex: _currentIndex,
-  onTap: (index) {
-    // Handle taps on each tab here
-    setState(() {
-      _currentIndex = index;
-    });
-
-    // Add logic based on the selected tab index
-    if (index == 0) {
-      // Handle Home icon tap
-      // Add your logic for the Home icon here
-    } else if (index == 1) {
-      // Handle Map icon tap
-      // Add your logic for the Map icon here
-    } else if (index == 2) {
-      // Handle Message icon tap
-      // Add your logic for the Message icon here
-    } else if (index == 3) {
-       Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) =>Profilepage_Sender()), // Replace 'AnotherPage()' with the page you want to navigate to
-    );
-    }
-  },
-  items: [
-    BottomNavigationBarItem(
-      icon: Icon(
-        Icons.home,
-        color: Colors.grey,
+          // Add logic based on the selected tab index
+          if (index == 0) {
+            // Handle Home icon tap
+            // Add your logic for the Home icon here
+          } else if (index == 1) {
+            // Handle Map icon tap
+            // Add your logic for the Map icon here
+          } else if (index == 2) {
+            // Handle Message icon tap
+            // Add your logic for the Message icon here
+          } else if (index == 3) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      Profilepage_Sender()), // Replace 'AnotherPage()' with the page you want to navigate to
+            );
+          }
+        },
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.home,
+              color: Colors.grey,
+            ),
+            label: "Home",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.location_on_outlined,
+              color: Colors.grey,
+            ),
+            label: "Map",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.message_outlined,
+              color: Colors.grey,
+            ),
+            label: "Message",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.account_circle_outlined,
+              color: Colors.grey,
+            ),
+            label: "Profile",
+          ),
+        ],
       ),
-      label: "Home",
-    ),
-    BottomNavigationBarItem(
-      icon: Icon(
-        Icons.location_on_outlined,
-        color: Colors.grey,
-      ),
-      label: "Map",
-    ),
-    BottomNavigationBarItem(
-      icon: Icon(
-        Icons.message_outlined,
-        color: Colors.grey,
-      ),
-      label: "Message",
-    ),
-    BottomNavigationBarItem(
-      icon: Icon(
-        Icons.account_circle_outlined,
-        color: Colors.grey,
-      ),
-      label: "Profile",
-    ),
-  ],
-),
-
     );
   }
 }

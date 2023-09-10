@@ -51,8 +51,6 @@ class _OrderDetailsState extends State<OrderDetails> {
 
   final PackageData packageData = PackageData();
 
-  
-
   User? currentUser;
 
   @override
@@ -261,8 +259,7 @@ class _OrderDetailsState extends State<OrderDetails> {
 }
 
 class SenderInfoTab extends StatefulWidget {
-  
-  final TextEditingController nameController ;
+  final TextEditingController nameController;
   final TextEditingController phoneController;
   final TextEditingController addressController;
   final TextEditingController cityController;
@@ -290,44 +287,41 @@ class _SenderInfoTabState extends State<SenderInfoTab> {
 
   final currentUser = FirebaseAuth.instance.currentUser;
 
-  
-
   Future<void> fetchUserData() async {
-  if (currentUser == null) {
-    return;
+    if (currentUser == null) {
+      return;
+    }
+
+    final senderId = currentUser!.uid;
+    final userDoc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(senderId)
+        .get();
+
+    if (userDoc.exists) {
+      final userData = userDoc.data() as Map<String, dynamic>;
+
+      setState(() {
+        // Set the initial values for the sender's info fields
+        widget.nameController.text = userData['name'] ?? '';
+        widget.phoneController.text = userData['phone'] ?? '';
+        // widget.addressController.text = userData['address'] ?? '';
+        // widget.cityController.text = userData['city'] ?? '';
+        // widget.stateController.text = userData['state'] ?? '';
+        // widget.pincodeController.text = userData['pincode'] ?? '';
+        // Set other sender's info fields as needed
+      });
+      widget.packageData.senderName = widget.nameController.text;
+      widget.packageData.senderPhone = widget.phoneController.text;
+      // print(widget.nameController.text);
+    }
   }
 
-  final senderId = currentUser!.uid;
-  final userDoc = await FirebaseFirestore.instance.collection('users').doc(senderId).get();
-
-  if (userDoc.exists) {
-    final userData = userDoc.data() as Map<String, dynamic>;
-
-    setState(() {
-      // Set the initial values for the sender's info fields
-      widget.nameController.text = userData['name'] ?? '';
-      widget.phoneController.text = userData['phone'] ?? '';
-      // widget.addressController.text = userData['address'] ?? '';
-      // widget.cityController.text = userData['city'] ?? '';
-      // widget.stateController.text = userData['state'] ?? '';
-      // widget.pincodeController.text = userData['pincode'] ?? '';
-      // Set other sender's info fields as needed
-    });
-    widget.packageData.senderName = widget.nameController.text;
-    widget.packageData.senderPhone = widget.phoneController.text;
-    // print(widget.nameController.text);
+  @override
+  void initState() {
+    super.initState();
+    fetchUserData(); // Call the fetchUserData method here
   }
-}
-
-@override
-void initState() {
-  super.initState();
-  fetchUserData(); // Call the fetchUserData method here
-
-}
-
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -341,10 +335,10 @@ void initState() {
               buildTextField(
                 'Name',
                 Icons.person,
-                
+
                 widget.nameController.text,
                 widget.nameController,
-                
+
                 // validator: (value) {
                 //   if (value == null || value.isEmpty) {
                 //     return 'Name is required';
@@ -463,33 +457,28 @@ void initState() {
       {bool isPassword = false,
       TextInputType? keyboardType,
       FormFieldValidator<String>? validator}) {
+    bool isEnabled = true;
 
-         bool isEnabled = true;
+    // Check if the label is "Name" or "Phone Number" and disable those fields
+    if (label == 'Name' || label == 'Phone Number') {
+      isEnabled = false;
+    }
 
-  // Check if the label is "Name" or "Phone Number" and disable those fields
-  if (label == 'Name' || label == 'Phone Number') {
-    isEnabled = false;
-  }
+    // // Set the controller's text value based on the label
+    // if (label == 'Name') {
+    //   controller.text = widget.packageData.senderName;
+    // } else if (label == 'Phone Number') {
+    //   controller.text = widget.packageData.senderPhone;
+    // }
 
-  // // Set the controller's text value based on the label
-  // if (label == 'Name') {
-  //   controller.text = widget.packageData.senderName;
-  // } else if (label == 'Phone Number') {
-  //   controller.text = widget.packageData.senderPhone;
-  // }
-
-  //    // Create an onChanged handler only for the "Name" and "Phone Number" fields
-  //   void onChanged(String value) {
-  //     if (label == 'Name') {
-  //       widget.packageData.senderName = value;
-  //     } else if (label == 'Phone Number') {
-  //       widget.packageData.senderPhone = value;
-  //     }
-  //   }
-
-
-
-
+    //    // Create an onChanged handler only for the "Name" and "Phone Number" fields
+    //   void onChanged(String value) {
+    //     if (label == 'Name') {
+    //       widget.packageData.senderName = value;
+    //     } else if (label == 'Phone Number') {
+    //       widget.packageData.senderPhone = value;
+    //     }
+    //   }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
