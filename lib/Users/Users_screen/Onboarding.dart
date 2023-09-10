@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:deliveryx/Users/Users_screen/Sender/homepage.dart';
 import 'package:deliveryx/Users/Users_screen/Traveller/homepage.dart';
+import 'package:deliveryx/Users/Users_screen/Traveller/kyc.dart';
 import 'package:deliveryx/Users/Users_screen/home_screens.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,49 @@ class Onboarding extends StatefulWidget {
 class _OnboardingState extends State<Onboarding> {
   final AuthService _authService = AuthService();
   final FirestoreService _firestoreService = FirestoreService();
+
+  void navigateBasedOnRole() async {
+    final currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+      final userDoc =
+          FirebaseFirestore.instance.collection("users").doc(currentUser.uid);
+
+      final userData = await userDoc.get();
+
+      if (userData.exists) {
+        final role = userData.get("role");
+        final traveler = userData.get("traveler");
+
+        if (role == -1 && !traveler) {
+          // Update role to 1 and traveler to false
+          await userDoc.update({"role": 1, "traveler": true});
+
+          // Navigate to sender's home page
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => KYCScreen(),
+            ),
+          );
+        } else if (role == -1 && traveler) {
+          // Update role to 1 and traveler to true
+          await userDoc.update({"role": 1});
+
+          // Navigate to traveler home page
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomePage(),
+            ),
+          );
+        } 
+      }
+    }
+  }
+
+
+  
+
 
   @override
   Widget build(BuildContext context) {
@@ -176,27 +220,16 @@ class _OnboardingState extends State<Onboarding> {
                   elevation: 5,
                   minimumSize: Size(double.infinity, 0), // Full width
                 ),
-                onPressed: () async {
-                  try {
-                    firebase_auth.User? user =
-                        await _authService.getCurrentUser();
-
-                    if (user != null) {
-                      await _firestoreService.updateUserAsTraveler(user);
+                onPressed: () {
+                  
+                    navigateBasedOnRole();
 
                       
 
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(builder: (builder) => HomePage()),
-                          (route) => false);
 
                       // Now the "sender" and "traveler" fields in the document are updated,
                       // and user information is added to the "travelers" subcollection.
-                    }
-                  } catch (e) {
-                    print("Error updating user data: $e");
-                  }
+                    
 
                   // Implement the action when "Deliver a package" button is pressed
                 },

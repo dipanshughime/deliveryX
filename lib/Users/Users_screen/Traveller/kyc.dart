@@ -27,20 +27,20 @@ class _KYCScreenState extends State<KYCScreen> {
   }
 
   void showToast(String message) {
-  Fluttertoast.showToast(
-    msg: message,
-    toastLength: Toast.LENGTH_SHORT,
-    gravity: ToastGravity.BOTTOM,
-    timeInSecForIosWeb: 1,
-    backgroundColor: Colors.black, // Change to the desired background color
-    textColor: Colors.white, // Change to the desired text color
-    fontSize: 16.0,
-  );
-}
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.black, // Change to the desired background color
+      textColor: Colors.white, // Change to the desired text color
+      fontSize: 16.0,
+    );
+  }
 
   Future<String?> checkUserRole() async {
     final user = FirebaseAuth.instance.currentUser;
-    
+
     print(user);
     if (user != null) {
       // User is signed in, check their role in your Firebase Firestore users collection.
@@ -116,13 +116,24 @@ class _KYCScreenState extends State<KYCScreen> {
                       panName == CollectionName) {
                     // Show a toast message indicating successful verification
                     showToast('Aadhar and PAN verified successfully');
+                    final user = FirebaseAuth.instance.currentUser;
+                    if (user != null) {
+                      // Replace 'your_firestore_collection' with your actual collection name.
+                      final userRef = FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(user.uid);
 
-                    // Navigate to the next page (replace 'YourNextPage' with the actual page name)
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => HomePage()),
-                    );
+                      await userRef.update({
+                        'Aadhar Number': aadhaarNumber,
+                        'PAN Number': panNumber,
+                      });
+
+                      // Navigate to the next page (replace 'YourNextPage' with the actual page name)
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => HomePage()),
+                      );
+                    }
                   } else {
                     // Handle the case where verification fails or conditions are not met
                     if (aadharVerificationResult != 'completed') {

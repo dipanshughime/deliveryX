@@ -1,5 +1,6 @@
 import 'dart:ffi';
 import 'package:deliveryx/Users/Users_screen/Sender/profilepage.dart';
+import 'package:deliveryx/Users/Users_screen/Traveller/homepage.dart';
 import 'package:flutter/material.dart';
 import '../../services/auth.dart';
 import 'registration.dart';
@@ -210,7 +211,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (c) => Profilepage_Sender()));
+                              builder: (c) => RegisterScreen()));
                     },
                     child: Text(
                       'Sign up',

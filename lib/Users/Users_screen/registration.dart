@@ -119,7 +119,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
                 SizedBox(height: 35),
-                buildTextField('Full Name', Icons.person, 'Enter your name',
+                buildTextField('Full Name (AS PER AADHAR)', Icons.person, 'Enter your name',
                     controller: nameTextEditingController, validator: (value) {
                   if (value!.isEmpty) {
                     return 'Please enter your name';

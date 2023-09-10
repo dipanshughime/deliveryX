@@ -21,6 +21,7 @@ class _Profilepage_SenderState extends State<Profilepage_Sender> {
 
   String name = ""; // State variable for name
   String phoneNumber = "";
+  int role = -1;
 
   @override
   void initState() {
@@ -46,6 +47,8 @@ class _Profilepage_SenderState extends State<Profilepage_Sender> {
                 "name"); // Assuming 'name' is the field name for name in Firestore
             phoneNumber = userData.get(
                 "phone"); // Assuming 'phoneNumber' is the field name for phone number in Firestore
+
+            role = userData.get('role');
           });
           print(name);
         }
@@ -337,8 +340,18 @@ class _Profilepage_SenderState extends State<Profilepage_Sender> {
                   Icons.person,
                   color: Color(0xFFA084E8),
                 ),
-                title: Text('Switch Role'),
+                title: Text(
+                  role == 0
+                      ? 'Switch roles to Traveler'
+                      : 'Switch roles to Sender',
+                  style: TextStyle(
+                    color: role == 0
+                        ? Colors.black
+                        : Colors.black, // Customize the text color based on the role
+                  ),
+                ),
               ),
+              
             ),
           ),
           Padding(
